@@ -9,7 +9,22 @@
  * - 右上角即時計數器
  */
 class SubmissionWall {
-  constructor() {
+  /**
+   * @param {Object} options
+   * @param {string} options.questionId - 過濾的問題 ID（'1' 或 '2'）
+   * @param {string} options.wallSelector - 投稿牆容器的 CSS selector
+   * @param {string} options.counterSelector - 計數器的 CSS selector
+   * @param {string} options.counterLabel - 計數器標籤（如 '個大象' 或 '個承諾'）
+   */
+  constructor(options = {}) {
+    /** @type {string} 問題 ID 過濾 */
+    this.questionId = options.questionId || '1';
+    /** @type {string} 投稿牆容器 selector */
+    this.wallSelector = options.wallSelector || '#submission-wall';
+    /** @type {string} 計數器 selector */
+    this.counterSelector = options.counterSelector || '#submission-counter';
+    /** @type {string} 計數器標籤 */
+    this.counterLabel = options.counterLabel || '個大象';
     /** @type {Array<Object>} 目前顯示中的投稿 */
     this.submissions = [];
     /** @type {Array<Object>} 等待渲染的佇列 */
@@ -71,6 +86,7 @@ class SubmissionWall {
         .from(SUPABASE_CONFIG.table)
         .select('*', { count: 'exact' })
         .eq('session_id', SUPABASE_CONFIG.sessionId)
+        .eq('question_id', this.questionId)
         .order('created_at', { ascending: false })
         .limit(this.maxVisible);
 
@@ -99,7 +115,7 @@ class SubmissionWall {
    */
   _subscribeRealtime() {
     this.channel = this.supabase
-      .channel('submissions-realtime')
+      .channel(`submissions-realtime-q${this.questionId}`)
       .on(
         'postgres_changes',
         {
@@ -111,6 +127,8 @@ class SubmissionWall {
         (payload) => {
           this.realtimeConnected = true;
           const newItem = payload.new;
+          // 過濾 question_id（Realtime filter 不支援多欄位，需要前端過濾）
+          if (newItem.question_id !== this.questionId) return;
           if (!this.seenIds.has(newItem.id)) {
             this.seenIds.add(newItem.id);
             this.totalCount++;
@@ -139,6 +157,7 @@ class SubmissionWall {
           .from(SUPABASE_CONFIG.table)
           .select('*')
           .eq('session_id', SUPABASE_CONFIG.sessionId)
+          .eq('question_id', this.questionId)
           .order('created_at', { ascending: false })
           .limit(10);
 
@@ -200,7 +219,7 @@ class SubmissionWall {
    * @param {Object} item - 投稿資料
    */
   _renderCard(item) {
-    const wall = document.getElementById('submission-wall');
+    const wall = document.querySelector(this.wallSelector);
     if (!wall) return;
 
     // 隨機微旋轉角度（-3 ~ 3 度）和起始縮放
@@ -247,7 +266,7 @@ class SubmissionWall {
    * 更新右上角計數器
    */
   _updateCounter() {
-    const counter = document.getElementById('submission-counter');
+    const counter = document.querySelector(this.counterSelector);
     if (counter) {
       counter.textContent = this.totalCount;
     }

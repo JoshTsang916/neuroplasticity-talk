@@ -456,6 +456,21 @@
         </aside>
       </section>
 
+      <!-- 第 31b 頁：一度轉向投稿牆 -->
+      <section class="slide-wall" data-wall-question="2">
+        <div class="wall-header">
+          <div class="wall-counter">
+            <span class="wall-counter-number" id="submission-counter-2">0</span> 個承諾
+          </div>
+        </div>
+        <div id="submission-wall-2"></div>
+        <aside class="notes">
+          [~48:00] 一度轉向投稿牆。
+          「每一個承諾，都是一次溫柔的轉向。」
+          讓投稿持續出現，等到差不多再翻頁。
+        </aside>
+      </section>
+
       <!-- 第 32 頁：再次閉眼 + 15 秒計時器 -->
       <section class="slide-blackout slide-timer" data-timer="15">
         <p class="blackout-text">
@@ -583,21 +598,38 @@
         if (qrUrl2) qrUrl2.textContent = SUBMIT_URL_Q2;
       });
 
-      // 投稿牆：進入第 16 頁時啟動，離開時銷毀
-      let wallInitialized = false;
+      // 投稿牆：兩個牆分別管理（問題1：大象、問題2：一度轉向）
+      const wall1 = new SubmissionWall({
+        questionId: '1',
+        wallSelector: '#submission-wall',
+        counterSelector: '#submission-counter',
+        counterLabel: '個大象'
+      });
+      const wall2 = new SubmissionWall({
+        questionId: '2',
+        wallSelector: '#submission-wall-2',
+        counterSelector: '#submission-counter-2',
+        counterLabel: '個承諾'
+      });
+
+      let activeWall = null;
 
       Reveal.on('slidechanged', (event) => {
         const currentSlide = event.currentSlide;
+        const wallQuestion = currentSlide.getAttribute('data-wall-question');
+        const hasWall1 = currentSlide.querySelector('#submission-wall') !== null;
 
-        // 偵測投稿牆頁面（有 #submission-wall 的頁面）
-        const isWallSlide = currentSlide.querySelector('#submission-wall') !== null;
-
-        if (isWallSlide && !wallInitialized) {
-          submissionWall.init();
-          wallInitialized = true;
-        } else if (!isWallSlide && wallInitialized) {
-          submissionWall.destroy();
-          wallInitialized = false;
+        if (hasWall1 && activeWall !== wall1) {
+          if (activeWall) activeWall.destroy();
+          wall1.init();
+          activeWall = wall1;
+        } else if (wallQuestion === '2' && activeWall !== wall2) {
+          if (activeWall) activeWall.destroy();
+          wall2.init();
+          activeWall = wall2;
+        } else if (!hasWall1 && wallQuestion !== '2' && activeWall) {
+          activeWall.destroy();
+          activeWall = null;
         }
       });
 
