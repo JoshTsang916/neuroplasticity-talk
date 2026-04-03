@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>匿名投稿</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    /* 品牌色系 */
+    :root {
+      --color-bg: #2C1810;
+      --color-primary: #C8553D;
+      --color-text: #FFF8F0;
+      --color-text-sub: #D4956A;
+      --font-heading: 'Noto Serif TC', serif;
+      --font-body: 'Microsoft YaHei', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-weight: 600;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2em 1.5em;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+    }
+
+    .question {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 1.15em;
+      line-height: 1.7;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      padding: 1em;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 1em;
+      line-height: 1.7;
+      letter-spacing: 0.02em;
+      color: var(--color-text);
+      background-color: rgba(255, 248, 240, 0.08);
+      border: 1px solid rgba(212, 149, 106, 0.3);
+      border-radius: 12px;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s ease;
+      autocomplete: off;
+    }
+
+    textarea:focus {
+      border-color: var(--color-text-sub);
+    }
+
+    textarea::placeholder {
+      color: rgba(212, 149, 106, 0.5);
+    }
+
+    .char-count {
+      font-size: 0.8em;
+      color: var(--color-text-sub);
+      text-align: right;
+      opacity: 0.6;
+    }
+
+    .submit-btn {
+      width: 100%;
+      min-height: 52px;
+      padding: 0.8em 1.5em;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 1.1em;
+      letter-spacing: 0.03em;
+      color: var(--color-text);
+      background-color: var(--color-primary);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.98);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .feedback {
+      text-align: center;
+      font-size: 0.95em;
+      color: var(--color-text-sub);
+      min-height: 1.5em;
+      transition: opacity 0.3s ease;
+    }
+
+    .error-msg {
+      text-align: center;
+      font-size: 0.9em;
+      color: var(--color-primary);
+      min-height: 1.5em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p class="question" id="question-text">
+      最近有什麼事，你知道不該在意，但大腦就是停不下來？
+    </p>
+
+    <div>
+      <textarea
+        id="submission-input"
+        maxlength="200"
+        placeholder="匿名分享，沒有人會知道是你..."
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+      ></textarea>
+      <div class="char-count"><span id="char-current">0</span>/200</div>
+    </div>
+
+    <button class="submit-btn" id="submit-btn">送出</button>
+
+    <p class="feedback" id="feedback"></p>
+    <p class="error-msg" id="error-msg"></p>
+  </div>
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
+  <!-- 共用設定 -->
+  <script src="../js/supabase-config.js"></script>
+
+  <script>
+    /**
+     * 投稿頁邏輯
+     * - 支援 URL query param ?q=2 切換問題（收尾的「一度轉向」）
+     * - 送出後 disable 2 秒防重複
+     * - 用 textContent 防 XSS
+     * - 連線失敗時顯示錯誤提示
+     */
+    (function () {
+      'use strict';
+
+      // 問題切換：?q=2 為收尾問題
+      const params = new URLSearchParams(window.location.search);
+      const questionId = params.get('q') || '1';
+      const questionEl = document.getElementById('question-text');
+
+      const questions = {
+        '1': '最近有什麼事，你知道不該在意，但大腦就是停不下來？',
+        '2': '明天，你可以做的一個「一度轉向」是什麼？'
+      };
+
+      if (questions[questionId]) {
+        questionEl.textContent = questions[questionId];
+      }
+
+      // DOM 元素
+      const input = document.getElementById('submission-input');
+      const btn = document.getElementById('submit-btn');
+      const feedback = document.getElementById('feedback');
+      const errorMsg = document.getElementById('error-msg');
+      const charCurrent = document.getElementById('char-current');
+
+      // 字數計數
+      input.addEventListener('input', () => {
+        charCurrent.textContent = input.value.length;
+      });
+
+      // 初始化 Supabase
+      let supabaseClient = null;
+      try {
+        supabaseClient = window.supabase.createClient(
+          SUPABASE_CONFIG.url,
+          SUPABASE_CONFIG.anonKey
+        );
+      } catch (err) {
+        errorMsg.textContent = '網路連線中斷，請稍後再試';
+      }
+
+      // 送出
+      btn.addEventListener('click', async () => {
+        const content = input.value.trim();
+        if (!content) return;
+
+        if (!supabaseClient) {
+          errorMsg.textContent = '網路連線中斷，請稍後再試';
+          return;
+        }
+
+        // 防重複點擊
+        btn.disabled = true;
+        feedback.textContent = '';
+        errorMsg.textContent = '';
+
+        try {
+          const { error } = await supabaseClient
+            .from(SUPABASE_CONFIG.table)
+            .insert({
+              session_id: SUPABASE_CONFIG.sessionId,
+              question_id: questionId,
+              content: content
+            });
+
+          if (error) throw error;
+
+          // 成功
+          feedback.textContent = '謝謝你的勇氣';
+          input.value = '';
+          charCurrent.textContent = '0';
+
+          // 2 秒後恢復
+          setTimeout(() => {
+            btn.disabled = false;
+            feedback.textContent = '';
+          }, 2000);
+
+        } catch (err) {
+          console.error('投稿失敗:', err);
+          errorMsg.textContent = '網路連線中斷，請稍後再試';
+          btn.disabled = false;
+        }
+      });
+
+      // Enter 鍵送出（手機友善）
+      input.addEventListener('keydown', (e) => {
+        // Shift+Enter 允許換行，單獨 Enter 送出
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

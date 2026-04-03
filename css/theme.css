@@ -1,0 +1,548 @@
+/**
+ * 品牌主題樣式
+ * 神經可塑性：在旅途中重塑 — HPX 簡報
+ *
+ * 色彩系統：
+ * - 背景（HTML 頁）：#2C1810 深咖啡
+ * - 主色/強調：#C8553D 磚紅
+ * - 主文字：#FFF8F0 米白
+ * - 副文字：#D4956A 焦糖橘
+ * - 卡片背景：#FFF8F0 米白
+ * - 卡片文字：#5C4033 深咖啡
+ */
+
+/* ========================================
+   基礎設定
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap');
+
+:root {
+  --color-bg: #2C1810;
+  --color-primary: #C8553D;
+  --color-text: #FFF8F0;
+  --color-text-sub: #D4956A;
+  --color-card-bg: #FFF8F0;
+  --color-card-text: #5C4033;
+  --font-heading: 'Noto Serif TC', serif;
+  --font-body: 'Microsoft YaHei', sans-serif;
+  --font-english: 'Georgia', serif;
+}
+
+/* Reveal.js 全域覆寫 */
+.reveal {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.03em;
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+/* 深色背景（HTML 頁面預設） */
+.reveal .slides section {
+  background-color: var(--color-bg);
+}
+
+/* NLM 圖片頁：背景由圖片處理，不需要額外背景色 */
+.reveal .slides section[data-background-image] {
+  background-color: transparent;
+}
+
+/* ========================================
+   文字排版
+   ======================================== */
+
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  text-transform: none;
+}
+
+.reveal h1 {
+  font-size: 2.4em;
+}
+
+.reveal h2 {
+  font-size: 1.8em;
+}
+
+.reveal h3 {
+  font-size: 1.3em;
+}
+
+.reveal p {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.03em;
+  line-height: 1.8;
+  margin-bottom: 0.6em;
+}
+
+.reveal .text-sub {
+  color: var(--color-text-sub);
+}
+
+.reveal .text-primary {
+  color: var(--color-primary);
+}
+
+.reveal .text-english {
+  font-family: var(--font-english);
+  font-weight: 400;
+}
+
+/* ========================================
+   大字金句頁
+   ======================================== */
+
+.reveal .slide-quote {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: 2em;
+}
+
+.reveal .slide-quote p {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.6em;
+  line-height: 1.6;
+  letter-spacing: 0.06em;
+  max-width: 16em;
+}
+
+/* ========================================
+   故事線頁
+   ======================================== */
+
+.reveal .slide-story {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2em 3em;
+  height: 100%;
+}
+
+.reveal .slide-story .story-text {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.35em;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+  max-width: 20em;
+  border-left: 3px solid var(--color-primary);
+  padding-left: 1.2em;
+}
+
+/* ========================================
+   呼吸過渡頁
+   ======================================== */
+
+.reveal .slide-breath {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
+
+.reveal .slide-breath p {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.5em;
+  line-height: 1.8;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  animation: breathFadeIn 2s ease forwards;
+  max-width: 16em;
+}
+
+@keyframes breathFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   手機指令頁
+   ======================================== */
+
+.reveal .slide-instruction {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2em 3em;
+  height: 100%;
+}
+
+.reveal .slide-instruction p {
+  font-size: 1.2em;
+  line-height: 2;
+  max-width: 22em;
+}
+
+/* ========================================
+   計時器
+   ======================================== */
+
+.reveal .slide-timer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.timer-ring-wrapper,
+.timer-digital-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.timer-ring {
+  width: 60vmin;
+  height: 60vmin;
+}
+
+.timer-ring-large {
+  width: 50vmin;
+  height: 50vmin;
+}
+
+.timer-ring-progress {
+  transition: stroke 0.3s ease;
+}
+
+.timer-digital {
+  position: absolute;
+  font-family: var(--font-english);
+  font-size: 4em;
+  font-weight: 400;
+  color: var(--color-text);
+  letter-spacing: 0.05em;
+}
+
+.timer-hint {
+  margin-top: 1.5em;
+  font-size: 0.9em;
+  color: var(--color-text-sub);
+  opacity: 0.7;
+}
+
+/* 呼吸脈動效果（30 秒計時器） */
+.breathing {
+  animation: breathingPulse 4s ease-in-out infinite;
+}
+
+@keyframes breathingPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1.0; }
+}
+
+/* 計時結束淡出 */
+.timer-fade-out {
+  animation: timerFadeOut 0.8s ease forwards;
+}
+
+@keyframes timerFadeOut {
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* ========================================
+   QR Code 頁
+   ======================================== */
+
+.reveal .slide-qr {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  gap: 1.5em;
+}
+
+.qr-question {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.2em;
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  max-width: 18em;
+  margin-bottom: 0.5em;
+}
+
+#qrcode-container {
+  padding: 1.2em;
+  background: var(--color-card-bg);
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.qr-url {
+  font-family: var(--font-english);
+  font-size: 1.1em;
+  color: var(--color-text-sub);
+  margin-top: 0.5em;
+}
+
+/* ========================================
+   投稿牆
+   ======================================== */
+
+.reveal .slide-wall {
+  padding: 1.5em;
+  height: 100%;
+  position: relative;
+}
+
+.wall-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.wall-counter {
+  font-family: var(--font-english);
+  font-size: 1.1em;
+  color: var(--color-text-sub);
+}
+
+.wall-counter-number {
+  font-size: 1.6em;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0 0.2em;
+}
+
+#submission-wall {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8em;
+  align-content: flex-start;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+.submission-card {
+  background: var(--color-card-bg);
+  color: var(--color-card-text);
+  border-radius: 12px;
+  padding: 1em 1.2em;
+  font-size: 0.85em;
+  line-height: 1.6;
+  max-width: 280px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.submission-card p {
+  color: var(--color-card-text);
+  margin: 0;
+  font-size: 1em;
+}
+
+/* ========================================
+   時間線（站4：六次演講）
+   ======================================== */
+
+.slide-timeline {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 2em;
+}
+
+.timeline-wrapper {
+  width: 90%;
+  max-width: 900px;
+  position: relative;
+  margin-top: 2em;
+}
+
+.timeline-line {
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, #5C4033, var(--color-text-sub), var(--color-primary), var(--color-text));
+  border-radius: 2px;
+  position: relative;
+}
+
+.timeline-nodes {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  top: -8px;
+}
+
+.timeline-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.timeline-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--color-text-sub);
+}
+
+/* 從灰到亮漸變 */
+.timeline-node:nth-child(1) .timeline-dot { background: #5C4033; border-color: #5C4033; }
+.timeline-node:nth-child(2) .timeline-dot { background: #7A5E4A; border-color: #7A5E4A; }
+.timeline-node:nth-child(3) .timeline-dot { background: #9A7B60; border-color: #9A7B60; }
+.timeline-node:nth-child(4) .timeline-dot { background: #B89878; border-color: #B89878; }
+.timeline-node:nth-child(5) .timeline-dot { background: #D4956A; border-color: #D4956A; }
+.timeline-node:nth-child(6) .timeline-dot { background: var(--color-primary); border-color: var(--color-primary); box-shadow: 0 0 12px rgba(200, 85, 61, 0.5); }
+
+.timeline-label {
+  font-size: 0.6em;
+  color: var(--color-text-sub);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.timeline-node:last-child .timeline-label {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+/* ========================================
+   手機 Callback 頁
+   ======================================== */
+
+.reveal .slide-callback {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2em 3em;
+  height: 100%;
+}
+
+.reveal .slide-callback p {
+  font-size: 1.15em;
+  line-height: 2;
+  max-width: 22em;
+}
+
+/* ========================================
+   Speaker Notes 隱藏（非 speaker view 時不顯示）
+   ======================================== */
+
+.reveal aside.notes {
+  display: none;
+}
+
+/* ========================================
+   Reveal.js 覆寫：控制元素樣式
+   ======================================== */
+
+.reveal .controls {
+  color: var(--color-text-sub);
+}
+
+.reveal .progress {
+  color: var(--color-primary);
+  height: 3px;
+}
+
+.reveal .slide-number {
+  color: var(--color-text-sub);
+  font-family: var(--font-english);
+  font-size: 0.7em;
+  opacity: 0.5;
+}
+
+/* ========================================
+   NLM 圖片頁背景設定
+   ======================================== */
+
+.reveal .slides section[data-background-image] {
+  /* NLM 圖片頁不需要額外的 padding/margin */
+  padding: 0;
+}
+
+/* ========================================
+   黑屏開場頁
+   ======================================== */
+
+.slide-blackout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: #1a0f0a;
+}
+
+.slide-blackout .blackout-text {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.4em;
+  color: var(--color-text);
+  opacity: 0;
+  animation: blackoutFadeIn 1.5s ease 0.5s forwards;
+  margin-bottom: 2em;
+}
+
+@keyframes blackoutFadeIn {
+  to { opacity: 0.8; }
+}
+
+/* ========================================
+   分享提問頁
+   ======================================== */
+
+.slide-prompt {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: 2em;
+}
+
+.slide-prompt p {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.5em;
+  line-height: 1.6;
+  max-width: 14em;
+}
