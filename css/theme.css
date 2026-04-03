@@ -7,6 +7,7 @@
  * - 主色/強調：#C8553D 磚紅
  * - 主文字：#FFF8F0 米白
  * - 副文字：#D4956A 焦糖橘
+ * - 淺咖啡：#8B7355
  * - 卡片背景：#FFF8F0 米白
  * - 卡片文字：#5C4033 深咖啡
  */
@@ -19,9 +20,11 @@
 
 :root {
   --color-bg: #2C1810;
+  --color-bg-deep: #1a0f0a;
   --color-primary: #C8553D;
   --color-text: #FFF8F0;
   --color-text-sub: #D4956A;
+  --color-muted: #8B7355;
   --color-card-bg: #FFF8F0;
   --color-card-text: #5C4033;
   --font-heading: 'Noto Serif TC', serif;
@@ -41,14 +44,16 @@
   text-align: left;
 }
 
-/* 深色背景（HTML 頁面預設） */
+/* 深色背景（HTML 頁面預設）— 漸層 + 微光暈 */
 .reveal .slides section {
-  background-color: var(--color-bg);
+  background:
+    radial-gradient(circle at 30% 50%, rgba(212, 149, 106, 0.08), transparent 60%),
+    linear-gradient(135deg, #2C1810 0%, #1a0f0a 100%);
 }
 
 /* NLM 圖片頁：背景由圖片處理，不需要額外背景色 */
 .reveal .slides section[data-background-image] {
-  background-color: transparent;
+  background: transparent;
 }
 
 /* ========================================
@@ -64,6 +69,10 @@
   letter-spacing: 0.06em;
   line-height: 1.4;
   text-transform: none;
+  /* 溫暖光暈 */
+  text-shadow:
+    0 2px 8px rgba(200, 85, 61, 0.3),
+    0 4px 12px rgba(212, 149, 106, 0.2);
 }
 
 .reveal h1 {
@@ -100,6 +109,15 @@
   font-weight: 400;
 }
 
+/* 裝飾線（段落之間的分隔線） */
+.decorative-line {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, var(--color-primary), transparent);
+  margin: 1.5rem auto;
+  border: none;
+}
+
 /* ========================================
    大字金句頁
    ======================================== */
@@ -121,6 +139,21 @@
   line-height: 1.6;
   letter-spacing: 0.06em;
   max-width: 16em;
+  /* 溫暖光暈 */
+  text-shadow:
+    0 2px 8px rgba(200, 85, 61, 0.3),
+    0 4px 12px rgba(212, 149, 106, 0.2);
+}
+
+/* 金句頁裝飾線（上下） */
+.reveal .slide-quote::before,
+.reveal .slide-quote::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--color-primary), transparent);
+  margin: 1.5rem auto;
 }
 
 /* ========================================
@@ -144,6 +177,24 @@
   max-width: 20em;
   border-left: 3px solid var(--color-primary);
   padding-left: 1.2em;
+  position: relative;
+  /* 溫暖光暈 */
+  text-shadow:
+    0 1px 6px rgba(200, 85, 61, 0.2),
+    0 3px 10px rgba(212, 149, 106, 0.15);
+}
+
+/* Josh 故事頁引號裝飾 */
+.reveal .slide-story .story-text::before {
+  content: '\201C';
+  font-size: 6rem;
+  color: rgba(200, 85, 61, 0.15);
+  font-family: Georgia, serif;
+  position: absolute;
+  top: -1rem;
+  left: -0.5rem;
+  line-height: 1;
+  pointer-events: none;
 }
 
 /* ========================================
@@ -156,6 +207,24 @@
   align-items: center;
   text-align: center;
   height: 100%;
+  position: relative;
+}
+
+/* 呼吸圓環（文字背後的裝飾） */
+.reveal .slide-breath::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border: 2px solid rgba(200, 85, 61, 0.3);
+  border-radius: 50%;
+  animation: breatheCircle 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes breatheCircle {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.15); opacity: 0.6; }
 }
 
 .reveal .slide-breath p {
@@ -165,8 +234,14 @@
   line-height: 1.8;
   letter-spacing: 0.06em;
   opacity: 0;
-  animation: breathFadeIn 2s ease forwards;
+  animation: breathFadeIn 2s ease forwards, breathingText 4s ease-in-out 2s infinite;
   max-width: 16em;
+  position: relative;
+  z-index: 1;
+  /* 溫暖光暈 */
+  text-shadow:
+    0 2px 8px rgba(200, 85, 61, 0.3),
+    0 4px 12px rgba(212, 149, 106, 0.2);
 }
 
 @keyframes breathFadeIn {
@@ -178,6 +253,12 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* 呼吸脈動（淡入完成後持續呼吸） */
+@keyframes breathingText {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
 }
 
 /* ========================================
@@ -196,6 +277,9 @@
   font-size: 1.2em;
   line-height: 2;
   max-width: 22em;
+  text-shadow:
+    0 1px 6px rgba(200, 85, 61, 0.2),
+    0 3px 10px rgba(212, 149, 106, 0.12);
 }
 
 /* ========================================
@@ -208,6 +292,11 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+  /* 微弱的放射狀光暈背景 */
+  background:
+    radial-gradient(circle at 50% 50%, rgba(200, 85, 61, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 30% 50%, rgba(212, 149, 106, 0.08), transparent 60%),
+    linear-gradient(135deg, #2C1810 0%, #1a0f0a 100%);
 }
 
 .timer-container {
@@ -248,6 +337,8 @@
   font-weight: 400;
   color: var(--color-text);
   letter-spacing: 0.05em;
+  /* 數字光暈 */
+  text-shadow: 0 0 20px rgba(212, 149, 106, 0.3);
 }
 
 .timer-hint {
@@ -303,7 +394,8 @@
   margin-bottom: 0.5em;
 }
 
-#qrcode-container {
+/* BUG-1 修正：用屬性選擇器統一所有 QR code 容器的樣式 */
+[id^="qrcode-container"] {
   padding: 1.2em;
   background: var(--color-card-bg);
   border-radius: 12px;
@@ -340,11 +432,13 @@
   color: var(--color-text-sub);
 }
 
+/* 計數器數字加大、加光暈 */
 .wall-counter-number {
-  font-size: 1.6em;
+  font-size: 2.2em;
   font-weight: 700;
   color: var(--color-primary);
   margin: 0 0.2em;
+  text-shadow: 0 0 12px rgba(200, 85, 61, 0.4);
 }
 
 #submission-wall {
@@ -356,16 +450,20 @@
   overflow: hidden;
 }
 
+/* 卡片毛玻璃效果 */
 .submission-card {
-  background: var(--color-card-bg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background: rgba(255, 248, 240, 0.9);
   color: var(--color-card-text);
   border-radius: 12px;
   padding: 1em 1.2em;
   font-size: 0.85em;
   line-height: 1.6;
   max-width: 280px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
+  border: 1px solid rgba(255, 248, 240, 0.3);
 }
 
 .submission-card p {
@@ -394,10 +492,18 @@
   margin-top: 2em;
 }
 
+/* 連接線漸層（從暗到亮） */
 .timeline-line {
   width: 100%;
   height: 3px;
-  background: linear-gradient(to right, #5C4033, var(--color-text-sub), var(--color-primary), var(--color-text));
+  background: linear-gradient(to right,
+    #5C4033 0%,
+    #7A5E4A 20%,
+    #9A7B60 40%,
+    var(--color-text-sub) 60%,
+    var(--color-primary) 80%,
+    var(--color-text) 100%
+  );
   border-radius: 2px;
   position: relative;
 }
@@ -421,26 +527,47 @@
   height: 16px;
   border-radius: 50%;
   border: 2px solid var(--color-text-sub);
+  transition: transform 0.3s ease;
 }
 
-/* 從灰到亮漸變 */
+/* 從灰暗到明亮漸變 */
 .timeline-node:nth-child(1) .timeline-dot { background: #5C4033; border-color: #5C4033; }
 .timeline-node:nth-child(2) .timeline-dot { background: #7A5E4A; border-color: #7A5E4A; }
 .timeline-node:nth-child(3) .timeline-dot { background: #9A7B60; border-color: #9A7B60; }
 .timeline-node:nth-child(4) .timeline-dot { background: #B89878; border-color: #B89878; }
 .timeline-node:nth-child(5) .timeline-dot { background: #D4956A; border-color: #D4956A; }
-.timeline-node:nth-child(6) .timeline-dot { background: var(--color-primary); border-color: var(--color-primary); box-shadow: 0 0 12px rgba(200, 85, 61, 0.5); }
+
+/* 最後一個節點（今天）加脈動效果 */
+.timeline-node:nth-child(6) .timeline-dot {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 12px rgba(200, 85, 61, 0.5);
+  animation: timelinePulse 2s ease-in-out infinite;
+}
+
+@keyframes timelinePulse {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(200, 85, 61, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(200, 85, 61, 0.8), 0 0 40px rgba(200, 85, 61, 0.3);
+    transform: scale(1.2);
+  }
+}
 
 .timeline-label {
   font-size: 0.6em;
   color: var(--color-text-sub);
   text-align: center;
   white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .timeline-node:last-child .timeline-label {
   color: var(--color-text);
   font-weight: 700;
+  text-shadow: 0 1px 8px rgba(200, 85, 61, 0.3);
 }
 
 /* ========================================
@@ -459,6 +586,9 @@
   font-size: 1.15em;
   line-height: 2;
   max-width: 22em;
+  text-shadow:
+    0 1px 6px rgba(200, 85, 61, 0.2),
+    0 3px 10px rgba(212, 149, 106, 0.12);
 }
 
 /* ========================================
@@ -508,17 +638,21 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-color: #1a0f0a;
+  background: radial-gradient(circle at 50% 50%, rgba(44, 24, 16, 0.5), #1a0f0a 70%);
 }
 
+/* 「請閉上眼睛」大字 + 溫暖光暈 */
 .slide-blackout .blackout-text {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.4em;
+  font-size: 1.8em;
   color: var(--color-text);
   opacity: 0;
   animation: blackoutFadeIn 1.5s ease 0.5s forwards;
   margin-bottom: 2em;
+  text-shadow:
+    0 2px 12px rgba(200, 85, 61, 0.4),
+    0 4px 20px rgba(212, 149, 106, 0.25);
 }
 
 @keyframes blackoutFadeIn {
@@ -545,4 +679,14 @@
   font-size: 1.5em;
   line-height: 1.6;
   max-width: 14em;
+  text-shadow:
+    0 2px 8px rgba(200, 85, 61, 0.3),
+    0 4px 12px rgba(212, 149, 106, 0.2);
+}
+
+/* QR 問題文字光暈 */
+.qr-question {
+  text-shadow:
+    0 2px 8px rgba(200, 85, 61, 0.25),
+    0 4px 12px rgba(212, 149, 106, 0.15);
 }

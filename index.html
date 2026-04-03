@@ -202,7 +202,7 @@
           最近有什麼事，你知道不該在意，<br>但大腦就是停不下來？
         </p>
         <div id="qrcode-container"></div>
-        <p class="qr-url">https://your-domain.com/submit</p>
+        <p class="qr-url" id="qr-url-1"></p>
         <aside class="notes">
           [22:00] 互動1 開始。
           「拿出手機——對，翻過來，掃 QR code。匿名的，沒有人知道是誰寫的。」
@@ -448,7 +448,7 @@
           明天，你可以做的一個<br><span class="text-primary">「一度轉向」</span>是什麼？
         </p>
         <div id="qrcode-container-2"></div>
-        <p class="qr-url">https://your-domain.com/submit?q=2</p>
+        <p class="qr-url" id="qr-url-2"></p>
         <aside class="notes">
           [47:00] 第二次投稿（可選）。
           「不用很大，一度就好。」
@@ -519,9 +519,9 @@
     (function () {
       'use strict';
 
-      // 投稿牆 URL（placeholder，部署後替換）
-      const SUBMIT_URL = 'https://your-domain.com/submit';
-      const SUBMIT_URL_Q2 = 'https://your-domain.com/submit?q=2';
+      // BUG-6 修正：動態生成投稿 URL，不再 hardcode
+      const SUBMIT_URL = location.origin + '/submit';
+      const SUBMIT_URL_Q2 = location.origin + '/submit?q=2';
 
       // 初始化 Reveal.js
       Reveal.initialize({
@@ -531,8 +531,9 @@
         progress: true,
         center: true,
         slideNumber: true,
-        transition: 'slide',
-        transitionSpeed: 'default',
+        // 2.7 全局動畫改進：HTML 頁面之間用 fade 過渡
+        transition: 'fade',
+        transitionSpeed: 'slow',
         backgroundTransition: 'none',
         // Speaker View 支援
         plugins: [RevealNotes],
@@ -574,6 +575,12 @@
             correctLevel: QRCode.CorrectLevel.M
           });
         }
+
+        // BUG-6：動態設定 URL 顯示文字
+        const qrUrl1 = document.getElementById('qr-url-1');
+        if (qrUrl1) qrUrl1.textContent = SUBMIT_URL;
+        const qrUrl2 = document.getElementById('qr-url-2');
+        if (qrUrl2) qrUrl2.textContent = SUBMIT_URL_Q2;
       });
 
       // 投稿牆：進入第 16 頁時啟動，離開時銷毀

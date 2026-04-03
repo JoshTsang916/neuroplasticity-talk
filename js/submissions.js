@@ -133,9 +133,11 @@ class SubmissionWall {
       if (this.realtimeConnected) return;
 
       try {
+        // BUG-2 修正：polling 帶 gt() 篩選時，count: 'exact' 返回的是篩選後筆數
+        // 而非總數。改用 this.totalCount += 新增數量 來累加計數。
         let query = this.supabase
           .from(SUPABASE_CONFIG.table)
-          .select('*', { count: 'exact' })
+          .select('*')
           .eq('session_id', SUPABASE_CONFIG.sessionId)
           .order('created_at', { ascending: false })
           .limit(10);
@@ -144,13 +146,8 @@ class SubmissionWall {
           query = query.gt('created_at', this.lastPolledAt);
         }
 
-        const { data, error, count } = await query;
+        const { data, error } = await query;
         if (error) throw error;
-
-        if (count !== null) {
-          this.totalCount = count;
-          this._updateCounter();
-        }
 
         if (data && data.length > 0) {
           this.lastPolledAt = data[0].created_at;
@@ -158,9 +155,11 @@ class SubmissionWall {
           data.reverse().forEach(item => {
             if (!this.seenIds.has(item.id)) {
               this.seenIds.add(item.id);
+              this.totalCount++;
               this._addToRenderQueue(item);
             }
           });
+          this._updateCounter();
         }
       } catch (err) {
         console.error('Polling 失敗:', err);
@@ -197,17 +196,22 @@ class SubmissionWall {
 
   /**
    * 渲染一張投稿卡片
+   * 進場帶隨機微旋轉 + 縮放，讓動畫更有趣
    * @param {Object} item - 投稿資料
    */
   _renderCard(item) {
     const wall = document.getElementById('submission-wall');
     if (!wall) return;
 
+    // 隨機微旋轉角度（-3 ~ 3 度）和起始縮放
+    const randomRotate = (Math.random() - 0.5) * 6;
+    const startScale = 0.85 + Math.random() * 0.1;
+
     // 建立卡片
     const card = document.createElement('div');
     card.className = 'submission-card';
     card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
+    card.style.transform = `translateY(20px) rotate(${randomRotate}deg) scale(${startScale})`;
 
     // 用 textContent 防 XSS
     const text = document.createElement('p');
@@ -218,11 +222,11 @@ class SubmissionWall {
     wall.insertBefore(card, wall.firstChild);
     this.submissions.unshift(item);
 
-    // 淡入動畫
+    // 淡入動畫（保留微旋轉，縮放歸一）
     requestAnimationFrame(() => {
-      card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      card.style.transition = 'opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
       card.style.opacity = '1';
-      card.style.transform = 'translateY(0)';
+      card.style.transform = `translateY(0) rotate(${randomRotate * 0.3}deg) scale(1)`;
     });
 
     // 超過上限時移除最舊的
