@@ -5,518 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>神經可塑性：在旅途中重塑</title>
 
-  <!-- Reveal.js 4.6.1 CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.min.css">
-  <!-- 使用 black 主題作為基底，再由自訂 CSS 覆蓋 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/theme/black.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
+
   <!-- 品牌主題 -->
   <link rel="stylesheet" href="css/theme.css">
-
-  <!-- Google Fonts（Noto Serif TC 已在 theme.css 中 import） -->
 </head>
 <body>
 
-  <div class="reveal">
-    <div class="slides">
+  <!-- ============================================================
+       Sidebar：頁面導航列（按 S 鍵 toggle）
+       ============================================================ -->
+  <nav id="sidebar" class="sidebar">
+    <div class="sidebar-inner" id="sidebar-list">
+      <!-- JS 動態生成 -->
+    </div>
+  </nav>
 
-      <!-- ============================================================
-           開場（2 min）
-           ============================================================ -->
+  <!-- ============================================================
+       主內容區：所有頁面 DOM 預先建好
+       ============================================================ -->
+  <main id="stage">
+    <!-- JS 動態生成所有頁面 -->
+  </main>
 
-      <!-- 第 1 頁：黑屏 → 15 秒倒數計時器 -->
-      <section class="slide-blackout slide-timer" data-timer="15">
-        <p class="blackout-text">請閉上眼睛</p>
-        <div class="timer-container"></div>
-        <aside class="notes">
-          [0:00] 開場：請大家閉上眼睛 15 秒。
-          按空白鍵啟動計時器，計時中鍵盤被鎖定。
-        </aside>
-      </section>
+  <!-- 底部進度條 -->
+  <div class="progress-bar">
+    <div class="progress-bar-fill" id="progress-fill"></div>
+  </div>
 
-      <!-- 第 2 頁：手機翻面指令 -->
-      <section class="slide-instruction">
-        <p>
-          把手機拿出來，看一下通知，然後翻面放在桌上。
-        </p>
-        <p style="margin-top: 1em;">
-          接下來 50 分鐘，試著不碰它。
-        </p>
-        <p style="margin-top: 1.5em; font-size: 1.1em;" class="text-primary">
-          每次你想翻過來——那就是你的大象。
-        </p>
-        <aside class="notes">
-          [0:15] 手機實驗啟動，貫穿全場。
-          語氣輕鬆但堅定，給大家一點時間處理手機。
-        </aside>
-      </section>
-
-      <!-- ============================================================
-           站1：啟程（8 min）
-           ============================================================ -->
-
-      <!-- 第 3 頁：NLM 封面 -->
-      <section data-background-image="slides/01-cover.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          [2:00] 站1 開始，目標 8 分鐘。
-          「今天要帶大家走一趟旅程——關於你的大腦如何保護你，又如何困住你。」
-        </aside>
-      </section>
-
-      <!-- 第 4 頁：書的介紹 -->
-      <section data-background-image="slides/02-book-intro.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          簡短介紹書籍背景，不要念太多，重點是引出核心概念。
-        </aside>
-      </section>
-
-      <!-- 第 5 頁：大象與騎象人 -->
-      <section data-background-image="slides/03-elephant-rider.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          核心比喻：大象（情緒腦）vs 騎象人（理性腦）。
-          「大象不是敵人，牠是你幾百萬年進化出來的生存系統。」
-        </aside>
-      </section>
-
-      <!-- 第 6 頁：壓力劫持 -->
-      <section data-background-image="slides/04-stress-hijack.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          解釋杏仁核劫持：壓力來的時候，大象會接管方向盤。
-        </aside>
-      </section>
-
-      <!-- 第 7 頁：Josh 故事線 1 -->
-      <section class="slide-story">
-        <div class="story-text">
-          第一次 HPX 講完，反芻三天。大腦一直說：你講得很爛，大家覺得你在浪費時間。
-        </div>
-        <aside class="notes">
-          [~6:00] 個人故事，語氣真誠自然。
-          停頓讓觀眾感受，不急著跳下一頁。
-        </aside>
-      </section>
-
-      <!-- ============================================================
-           站2：迷航與覺察（12 min）
-           ============================================================ -->
-
-      <!-- 第 8 頁：焦慮形成鏈 -->
-      <section data-background-image="slides/05-anxiety-chain.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          [10:00] 站2 開始，目標 12 分鐘。
-          焦慮不是一瞬間的事，是一連串連鎖反應。
-        </aside>
-      </section>
-
-      <!-- 第 9 頁：習慣死迴圈 -->
-      <section data-background-image="slides/06-habit-loop.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          Cue → Routine → Reward，解釋為什麼壞習慣這麼難改。
-        </aside>
-      </section>
-
-      <!-- 第 10 頁：手機 callback 1 -->
-      <section class="slide-callback">
-        <p>
-          順便問一下，剛才有人已經想翻手機了嗎？
-        </p>
-        <p style="margin-top: 1.2em;" class="text-sub">
-          那就是 Cue &rarr; Routine &rarr; Reward 正在運作。
-        </p>
-        <aside class="notes">
-          第一次 callback，輕鬆帶過，觀察觀眾反應。
-          「不用不好意思，這很正常。」
-        </aside>
-      </section>
-
-      <!-- 第 11 頁：失敗 = 軟體更新 -->
-      <section data-background-image="slides/07-software-update.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          重新框架：失敗不是 bug，是系統在安裝更新。
-        </aside>
-      </section>
-
-      <!-- 第 12 頁：將自己與表現分開 -->
-      <section data-background-image="slides/08-separate-self.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          「你不是你的表現。表現是數據，你是解讀數據的人。」
-        </aside>
-      </section>
-
-      <!-- 第 13 頁：Josh 故事線 2 -->
-      <section class="slide-story">
-        <div class="story-text">
-          到了第三四次，我注意到大象每次說同樣的台詞。光是注意到這件事，反芻從三天變成了一天。
-        </div>
-        <aside class="notes">
-          [~18:00] 個人成長弧線的中間點。
-          強調「注意到」本身就是改變的開始。
-        </aside>
-      </section>
-
-      <!-- ============================================================
-           呼吸過渡
-           ============================================================ -->
-
-      <!-- 第 14 頁：呼吸頁 -->
-      <section class="slide-breath">
-        <p>
-          你的大腦正在保護你。<br>只是有時候，保護看起來像是困住。
-        </p>
-        <aside class="notes">
-          [~20:00] 停 3-5 秒，讓這句話沉澱。
-          不要急著翻頁。
-        </aside>
-      </section>
-
-      <!-- ============================================================
-           互動1（5 min）
-           ============================================================ -->
-
-      <!-- 第 15 頁：QR Code + 問題 -->
-      <section class="slide-qr">
-        <p class="qr-question">
-          最近有什麼事，你知道不該在意，<br>但大腦就是停不下來？
-        </p>
-        <div id="qrcode-container"></div>
-        <p class="qr-url" id="qr-url-1"></p>
-        <aside class="notes">
-          [22:00] 互動1 開始。
-          「拿出手機——對，翻過來，掃 QR code。匿名的，沒有人知道是誰寫的。」
-          等 1-2 分鐘讓大家投稿。
-        </aside>
-      </section>
-
-      <!-- 第 16 頁：即時投稿牆 -->
-      <section class="slide-wall">
-        <div class="wall-header">
-          <div class="wall-counter">
-            <span class="wall-counter-number" id="submission-counter">0</span> 個大象
-          </div>
-        </div>
-        <div id="submission-wall"></div>
-        <aside class="notes">
-          [~23:00] 指著螢幕說：「XX 個大象。不是只有你一個人被帶著跑。」
-          讓投稿持續出現，等到差不多再翻頁。
-        </aside>
-      </section>
-
-      <!-- 第 17 頁：命名練習 + 30 秒計時器 -->
-      <section class="slide-timer" data-timer="30">
-        <div class="slide-instruction" style="margin-bottom: 1em;">
-          <p>
-            在心裡說：<span class="text-primary">我注意到我在擔心___。</span>
-          </p>
-          <p style="margin-top: 0.8em;" class="text-sub">
-            不用解決，就是命名。
-          </p>
-        </div>
-        <div class="timer-container"></div>
-        <aside class="notes">
-          [~25:00] 30 秒靜默命名練習。
-          按空白鍵啟動計時器，呼吸脈動效果會自動出現。
-        </aside>
-      </section>
-
-      <!-- ============================================================
-           站3：掌舵與重塑（12 min）
-           ============================================================ -->
-
-      <!-- 第 18 頁：創造空間 -->
-      <section data-background-image="slides/09-create-space.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          [27:00] 站3 開始，目標 12 分鐘。
-          「在刺激和反應之間，有一個空間。在那個空間裡，是我們選擇回應的力量。」
-        </aside>
-      </section>
-
-      <!-- 第 19 頁：保護腦力貨幣 -->
-      <section data-background-image="slides/10-brain-currency.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          可跳過（如果超時）。
-          注意力是有限的貨幣，每次反芻都在消費。
-        </aside>
-      </section>
-
-      <!-- 第 20 頁：輕輕轉向 -->
-      <section data-background-image="slides/11-gentle-steer.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          不是急轉彎，是溫柔地轉一度。
-        </aside>
-      </section>
-
-      <!-- 第 21 頁：手機 callback 2 -->
-      <section class="slide-callback">
-        <p>
-          你從開場到現在忍住沒碰手機——
-        </p>
-        <p style="margin-top: 1em;" class="text-primary">
-          恭喜，你已經在練習「在刺激和反應之間創造空間」了。
-        </p>
-        <aside class="notes">
-          第二次 callback。語氣肯定、溫暖。
-          「如果你忍不住翻了，也沒關係。你至少注意到了。」
-        </aside>
-      </section>
-
-      <!-- 第 22 頁：視覺化心理訓練 -->
-      <section data-background-image="slides/12-mental-rehearsal.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          可跳過（如果超時）。
-          心理預演：在腦中跑一遍，神經迴路一樣會強化。
-        </aside>
-      </section>
-
-      <!-- 第 23 頁：說出情緒的名字 -->
-      <section data-background-image="slides/13-name-emotions.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          Affect labeling：說出情緒的名字，杏仁核活動就會降低。
-        </aside>
-      </section>
-
-      <!-- 第 24 頁：Josh 故事線 3 -->
-      <section class="slide-story">
-        <div class="story-text">
-          我沒叫自己不要想，只是命名它：噢，又來了。然後打開 Claude 問個問題，大腦就被轉移了。
-        </div>
-        <aside class="notes">
-          [~35:00] 展示實際策略：命名 + 轉移注意力。
-          「不是壓抑，是溫柔地給大象另一條路。」
-        </aside>
-      </section>
-
-      <!-- ============================================================
-           呼吸過渡
-           ============================================================ -->
-
-      <!-- 第 25 頁：呼吸頁 -->
-      <section class="slide-breath">
-        <p>
-          你不需要一次轉完。<br>只需要轉一度。
-        </p>
-        <aside class="notes">
-          [~37:00] 核心訊息。停頓。
-        </aside>
-      </section>
-
-      <!-- ============================================================
-           互動2（5 min）
-           ============================================================ -->
-
-      <!-- 第 26 頁：兩人分享 + 2 分鐘計時器 -->
-      <section class="slide-timer" data-timer="120">
-        <div class="slide-instruction" style="margin-bottom: 1em;">
-          <p>
-            這 30 幾分鐘裡，你的大象叫了幾次？<br>你怎麼處理的？
-          </p>
-          <p style="margin-top: 1em;" class="text-sub">
-            跟旁邊的人聊聊。
-          </p>
-        </div>
-        <div class="timer-container"></div>
-        <aside class="notes">
-          [39:00] 互動2，兩人分享。
-          按空白鍵啟動 2 分鐘計時器。
-          最後 30 秒環形會變磚紅色提醒。
-        </aside>
-      </section>
-
-      <!-- 第 27 頁：邀請分享 -->
-      <section class="slide-prompt">
-        <p>
-          有沒有人願意跟大家分享？
-        </p>
-        <aside class="notes">
-          [41:00] 開放分享，等 2-3 位，不強迫。
-          「你的分享可能會讓另一個人覺得——原來不是只有我。」
-        </aside>
-      </section>
-
-      <!-- ============================================================
-           站4：無盡的延續（5 min）
-           ============================================================ -->
-
-      <!-- 第 28 頁：改變迴圈 + 金句 -->
-      <section data-background-image="slides/14-change-cycle.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          [44:00] 站4 開始，目標 5 分鐘。
-          改變是一個循環，不是一條直線。
-        </aside>
-      </section>
-
-      <!-- 第 29 頁：Josh 故事線 4 + 六次演講時間線 -->
-      <section class="slide-timeline">
-        <div class="slide-story" style="padding: 0; margin-bottom: 1.5em;">
-          <div class="story-text" style="font-size: 1.1em;">
-            從第一次到今天，六次站上台。<br>每次大象都來了，但每次牠待的時間都更短。
-          </div>
-        </div>
-        <div class="timeline-wrapper">
-          <div class="timeline-line"></div>
-          <div class="timeline-nodes">
-            <div class="timeline-node">
-              <div class="timeline-dot"></div>
-              <span class="timeline-label">Talk 1<br>反芻三天</span>
-            </div>
-            <div class="timeline-node">
-              <div class="timeline-dot"></div>
-              <span class="timeline-label">Talk 2<br>反芻兩天</span>
-            </div>
-            <div class="timeline-node">
-              <div class="timeline-dot"></div>
-              <span class="timeline-label">Talk 3<br>反芻一天</span>
-            </div>
-            <div class="timeline-node">
-              <div class="timeline-dot"></div>
-              <span class="timeline-label">Talk 4<br>半天</span>
-            </div>
-            <div class="timeline-node">
-              <div class="timeline-dot"></div>
-              <span class="timeline-label">Talk 5<br>幾小時</span>
-            </div>
-            <div class="timeline-node">
-              <div class="timeline-dot"></div>
-              <span class="timeline-label">Talk 6<br>神清氣爽</span>
-            </div>
-          </div>
-        </div>
-        <aside class="notes">
-          [~45:00] 「你們是見證者。」
-          指著時間線從左到右，語氣從低到亮。
-        </aside>
-      </section>
-
-      <!-- 第 30 頁：品牌金句 -->
-      <section class="slide-quote">
-        <p>
-          重塑是為了挖出自己這個獨一無二的秘寶，是為了跟這個世界講述一個關於自己的故事。
-        </p>
-        <aside class="notes">
-          [~46:00] 核心訊息，大字，停頓。
-          讓觀眾自己消化。
-        </aside>
-      </section>
-
-      <!-- ============================================================
-           收尾（3 min）
-           ============================================================ -->
-
-      <!-- 第 31 頁：一度轉向 -->
-      <section class="slide-qr" id="slide-closing-qr">
-        <p class="qr-question">
-          明天，你可以做的一個<br><span class="text-primary">「一度轉向」</span>是什麼？
-        </p>
-        <div id="qrcode-container-2"></div>
-        <p class="qr-url" id="qr-url-2"></p>
-        <aside class="notes">
-          [47:00] 第二次投稿（可選）。
-          「不用很大，一度就好。」
-          也可以口頭引導，不一定要用投稿牆。
-        </aside>
-      </section>
-
-      <!-- 第 31b 頁：一度轉向投稿牆 -->
-      <section class="slide-wall" data-wall-question="2">
-        <div class="wall-header">
-          <div class="wall-counter">
-            <span class="wall-counter-number" id="submission-counter-2">0</span> 個承諾
-          </div>
-        </div>
-        <div id="submission-wall-2"></div>
-        <aside class="notes">
-          [~48:00] 一度轉向投稿牆。
-          「每一個承諾，都是一次溫柔的轉向。」
-          讓投稿持續出現，等到差不多再翻頁。
-        </aside>
-      </section>
-
-      <!-- 第 32 頁：再次閉眼 + 15 秒計時器 -->
-      <section class="slide-blackout slide-timer" data-timer="15">
-        <p class="blackout-text">
-          閉上眼睛。如果念頭跑出來，對它說：我看到你了。
-        </p>
-        <div class="timer-container"></div>
-        <aside class="notes">
-          [48:00] 首尾呼應。按空白鍵啟動計時器。
-          語氣溫柔緩慢。
-        </aside>
-      </section>
-
-      <!-- 第 33 頁：結語文字 -->
-      <section class="slide-quote">
-        <p>
-          不管你今天撐了 5 分鐘還是 50 分鐘，你已經觀察到了那個衝動。
-        </p>
-        <p style="margin-top: 1em; font-size: 0.85em;" class="text-sub">
-          這件小事，就是神經可塑性。
-        </p>
-        <aside class="notes">
-          [49:00] 最後一句話，語氣堅定但溫暖。
-          停頓，然後翻到結語頁。
-        </aside>
-      </section>
-
-      <!-- 第 34 頁：NLM 結語頁 -->
-      <section data-background-image="slides/15-ending.webp"
-               data-background-size="contain"
-               data-background-color="#FFF8F0"
-               data-transition="none">
-        <aside class="notes">
-          [50:00] 結束。
-          「謝謝大家的勇氣和耐心。」
-        </aside>
-      </section>
-
-    </div><!-- /.slides -->
-  </div><!-- /.reveal -->
-
-  <!-- Reveal.js 4.6.1 -->
-  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.min.js"></script>
-  <!-- Reveal.js Notes 插件（Speaker View 用） -->
-  <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/notes/notes.min.js"></script>
-
-  <!-- QR Code 生成（本地備份，CDN fallback） -->
+  <!-- QR Code 生成（本地備份） -->
   <script src="js/qrcode.min.js"></script>
 
   <!-- Supabase JS Client -->
@@ -529,80 +49,418 @@
 
   <script>
     /**
-     * Reveal.js 初始化與整合邏輯
+     * 簡報 SPA 核心控制器
+     * 純 HTML/CSS/JS，不依賴任何框架
      */
     (function () {
       'use strict';
 
-      // BUG-6 修正：動態生成投稿 URL，不再 hardcode
+      // ============================================================
+      // 35 頁完整定義
+      // ============================================================
+      const PAGES = [
+        // 開場
+        { id: 'opening-eyes', type: 'timer', timer: 15, title: '請閉上眼睛', text: '請閉上眼睛。', section: '開場' },
+        { id: 'opening-phone', type: 'text', title: '手機翻面', text: '把手機拿出來，看一下通知，然後翻面放在桌上。\n接下來 50 分鐘，試著不碰它。\n每次你想翻過來——那就是你的大象。', section: '' },
+
+        // 站1：啟程
+        { id: 'cover', type: 'image', src: 'slides/01-cover.webp', title: '封面', section: '站1：啟程' },
+        { id: 'book-intro', type: 'image', src: 'slides/02-book-intro.webp', title: '改變的溫柔指南', section: '' },
+        { id: 'elephant-rider', type: 'image', src: 'slides/03-elephant-rider.webp', title: '大象與騎象人', section: '' },
+        { id: 'stress-hijack', type: 'image', src: 'slides/04-stress-hijack.webp', title: '壓力劫持', section: '' },
+        { id: 'story-1', type: 'story', title: 'Josh 故事①', text: '第一次 HPX 講完，反芻三天。\n大腦一直說：你講得很爛，大家覺得你在浪費時間。', section: '' },
+
+        // 站2：迷航與覺察
+        { id: 'anxiety-chain', type: 'image', src: 'slides/05-anxiety-chain.webp', title: '焦慮的形成鏈', section: '站2：迷航' },
+        { id: 'habit-loop', type: 'image', src: 'slides/06-habit-loop.webp', title: '習慣死迴圈', section: '' },
+        { id: 'phone-cb-1', type: 'callback', title: '手機 Callback①', text: '順便問一下，\n剛才有人已經想翻手機了嗎？\n那就是 Cue → Routine → Reward 正在運作。', section: '' },
+        { id: 'software-update', type: 'image', src: 'slides/07-software-update.webp', title: '大腦軟體更新', section: '' },
+        { id: 'separate-self', type: 'image', src: 'slides/08-separate-self.webp', title: '抽離視角', section: '' },
+        { id: 'story-2', type: 'story', title: 'Josh 故事②', text: '到了第三四次，\n我注意到大象每次說同樣的台詞。\n光是注意到這件事，\n反芻從三天變成了一天。', section: '' },
+
+        // 呼吸過渡
+        { id: 'breath-1', type: 'breathing', title: '呼吸', text: '你的大腦正在保護你。\n只是有時候，保護看起來像是困住。', section: '呼吸' },
+
+        // 互動1
+        { id: 'qr-1', type: 'qr', title: 'QR 投稿', question: '最近有什麼事，你知道不該在意，但大腦就是停不下來？', questionId: '1', section: '互動1' },
+        { id: 'wall-1', type: 'wall', title: '投稿牆', questionId: '1', counterLabel: '個大象', section: '' },
+        { id: 'naming', type: 'timer', timer: 30, title: '命名練習', text: '在心裡說：\n我注意到我在擔心___。\n不用解決，就是命名。', section: '' },
+
+        // 站3：掌舵與重塑
+        { id: 'create-space', type: 'image', src: 'slides/09-create-space.webp', title: '創造空間', section: '站3：掌舵' },
+        { id: 'brain-currency', type: 'image', src: 'slides/10-brain-currency.webp', title: '保護腦力貨幣', section: '' },
+        { id: 'gentle-steer', type: 'image', src: 'slides/11-gentle-steer.webp', title: '輕輕轉向', section: '' },
+        { id: 'phone-cb-2', type: 'callback', title: '手機 Callback②', text: '你從開場到現在忍住沒碰手機——\n恭喜，你已經在練習\n「在刺激和反應之間創造空間」了。', section: '' },
+        { id: 'mental-rehearsal', type: 'image', src: 'slides/12-mental-rehearsal.webp', title: '心理彩排', section: '' },
+        { id: 'name-emotions', type: 'image', src: 'slides/13-name-emotions.webp', title: '呼喚騎象人', section: '' },
+        { id: 'story-3', type: 'story', title: 'Josh 故事③', text: '我沒叫自己不要想，\n只是命名它：噢，又來了。\n然後打開 Claude 問個問題，\n大腦就被轉移了。', section: '' },
+
+        // 呼吸過渡
+        { id: 'breath-2', type: 'breathing', title: '呼吸', text: '你不需要一次轉完。\n只需要轉一度。', section: '呼吸' },
+
+        // 互動2
+        { id: 'sharing', type: 'timer', timer: 120, title: '兩人分享', text: '這 30 幾分鐘裡，\n你的大象叫了幾次？\n你怎麼處理的？\n跟旁邊的人聊聊。', section: '互動2' },
+        { id: 'volunteer', type: 'text', title: '自願分享', text: '有沒有人願意\n跟大家分享？', section: '' },
+
+        // 站4：無盡的延續
+        { id: 'change-cycle', type: 'image', src: 'slides/14-change-cycle.webp', title: '改變的完整迴圈', section: '站4：延續' },
+        { id: 'timeline', type: 'timeline', title: '六次演講', section: '' },
+        { id: 'treasure', type: 'quote', title: '秘寶', text: '重塑是為了挖出自己\n這個獨一無二的秘寶，\n是為了跟這個世界\n講述一個關於自己的故事。', section: '' },
+
+        // 收尾
+        { id: 'qr-2', type: 'qr', title: '一度轉向', question: '明天，你可以做的一個「一度轉向」是什麼？', questionId: '2', section: '收尾' },
+        { id: 'wall-2', type: 'wall', title: '承諾牆', questionId: '2', counterLabel: '個承諾', section: '' },
+        { id: 'closing-eyes', type: 'timer', timer: 15, title: '再次閉眼', text: '閉上眼睛。\n如果念頭跑出來，\n對它說：我看到你了。', section: '' },
+        { id: 'closing-text', type: 'quote', title: '結語', text: '不管你今天撐了 5 分鐘還是 50 分鐘，\n你已經觀察到了那個衝動。\n這件小事，就是神經可塑性。', section: '' },
+        { id: 'ending', type: 'image', src: 'slides/15-ending.webp', title: '現在進行式', section: '' },
+      ];
+
+      // 動態投稿 URL
       const SUBMIT_URL = location.origin + '/submit';
       const SUBMIT_URL_Q2 = location.origin + '/submit?q=2';
 
-      // 初始化 Reveal.js
-      Reveal.initialize({
-        hash: true,
-        history: false,
-        controls: true,
-        progress: true,
-        center: true,
-        slideNumber: true,
-        // 2.7 全局動畫改進：HTML 頁面之間用 fade 過渡
-        transition: 'fade',
-        transitionSpeed: 'slow',
-        backgroundTransition: 'none',
-        // Speaker View 支援
-        plugins: [RevealNotes],
-        // 預設允許鍵盤（計時器啟動時會暫時關閉）
-        keyboard: true,
-        // 觸控支援
-        touch: true,
-        // 不自動播放
-        autoSlide: 0
-      });
+      // ============================================================
+      // 目前頁碼（0-based）
+      // ============================================================
+      let currentIndex = 0;
 
-      // Reveal ready 後初始化元件
-      Reveal.on('ready', () => {
-        // 初始化計時器
-        presentationTimer.init();
+      // ============================================================
+      // 頁面 DOM 建構
+      // ============================================================
+      const stage = document.getElementById('stage');
 
-        // 生成 QR Code（互動1）
-        const qrContainer1 = document.getElementById('qrcode-container');
-        if (qrContainer1) {
-          new QRCode(qrContainer1, {
-            text: SUBMIT_URL,
-            width: 220,
-            height: 220,
-            colorDark: '#2C1810',
-            colorLight: '#FFF8F0',
-            correctLevel: QRCode.CorrectLevel.M
-          });
+      /**
+       * 將含換行的文字轉成帶 <br> 的 HTML
+       * 用 textContent 賦值後再替換，防 XSS
+       */
+      function textToHtml(str) {
+        const temp = document.createElement('span');
+        temp.textContent = str;
+        return temp.innerHTML.replace(/\n/g, '<br>');
+      }
+
+      /**
+       * 時間線頁的節點資料
+       */
+      const TIMELINE_NODES = [
+        { label: 'Talk 1', sub: '反芻三天' },
+        { label: 'Talk 2', sub: '反芻兩天' },
+        { label: 'Talk 3', sub: '反芻一天' },
+        { label: 'Talk 4', sub: '半天' },
+        { label: 'Talk 5', sub: '幾小時' },
+        { label: 'Talk 6', sub: '神清氣爽' },
+      ];
+
+      // 為每種頁面建構 DOM
+      PAGES.forEach((page, index) => {
+        const el = document.createElement('div');
+        el.className = 'page';
+        el.id = `page-${page.id}`;
+        el.dataset.index = index;
+        el.dataset.type = page.type;
+
+        switch (page.type) {
+          // ────────────────────────────
+          // NLM 圖片頁
+          // ────────────────────────────
+          case 'image':
+            el.classList.add('page-image');
+            el.innerHTML = `<img src="${page.src}" alt="${page.title}" draggable="false">`;
+            break;
+
+          // ────────────────────────────
+          // 文字頁（手機翻面、自願分享等）
+          // ────────────────────────────
+          case 'text':
+            el.classList.add('page-text');
+            el.innerHTML = `
+              <div class="text-content">
+                <p>${textToHtml(page.text)}</p>
+              </div>`;
+            break;
+
+          // ────────────────────────────
+          // 故事頁
+          // ────────────────────────────
+          case 'story':
+            el.classList.add('page-story');
+            el.innerHTML = `
+              <div class="story-block">
+                <div class="story-quote-mark">\u201C</div>
+                <div class="story-text">${textToHtml(page.text)}</div>
+                <div class="story-decoration"></div>
+              </div>`;
+            break;
+
+          // ────────────────────────────
+          // 手機 Callback 頁
+          // ────────────────────────────
+          case 'callback':
+            el.classList.add('page-callback');
+            el.innerHTML = `
+              <div class="callback-content">
+                <p>${textToHtml(page.text)}</p>
+              </div>`;
+            break;
+
+          // ────────────────────────────
+          // 金句頁
+          // ────────────────────────────
+          case 'quote':
+            el.classList.add('page-quote');
+            el.innerHTML = `
+              <div class="quote-decoration-top"></div>
+              <p class="quote-text">${textToHtml(page.text)}</p>
+              <div class="quote-decoration-bottom"></div>`;
+            break;
+
+          // ────────────────────────────
+          // 呼吸過渡頁
+          // ────────────────────────────
+          case 'breathing':
+            el.classList.add('page-breathing');
+            el.innerHTML = `
+              <div class="breathing-ring"></div>
+              <p class="breathing-text">${textToHtml(page.text)}</p>`;
+            break;
+
+          // ────────────────────────────
+          // 計時器頁
+          // ────────────────────────────
+          case 'timer':
+            el.classList.add('page-timer');
+            el.dataset.timer = page.timer;
+            // 提示文字放在 timer 上方
+            const timerTextHtml = page.text ? `<p class="timer-prompt">${textToHtml(page.text)}</p>` : '';
+            el.innerHTML = `
+              ${timerTextHtml}
+              <div class="timer-container" data-duration="${page.timer}"></div>
+              <div class="timer-hint">按空白鍵開始</div>`;
+            break;
+
+          // ────────────────────────────
+          // QR Code 頁
+          // ────────────────────────────
+          case 'qr':
+            el.classList.add('page-qr');
+            const qrId = `qrcode-${page.questionId}`;
+            const urlId = `qr-url-${page.questionId}`;
+            el.innerHTML = `
+              <p class="qr-question">${textToHtml(page.question)}</p>
+              <div class="qr-wrapper" id="${qrId}"></div>
+              <p class="qr-url" id="${urlId}"></p>`;
+            break;
+
+          // ────────────────────────────
+          // 投稿牆頁
+          // ────────────────────────────
+          case 'wall':
+            el.classList.add('page-wall');
+            el.dataset.questionId = page.questionId;
+            const wallId = `submission-wall-${page.questionId}`;
+            const counterId = `submission-counter-${page.questionId}`;
+            el.innerHTML = `
+              <div class="wall-header">
+                <div class="wall-counter">
+                  <span class="wall-counter-number" id="${counterId}">0</span>
+                  <span class="wall-counter-label">${page.counterLabel}</span>
+                </div>
+              </div>
+              <div class="wall-grid" id="${wallId}"></div>`;
+            break;
+
+          // ────────────────────────────
+          // 時間線頁
+          // ────────────────────────────
+          case 'timeline':
+            el.classList.add('page-timeline');
+            let nodesHtml = TIMELINE_NODES.map((n, i) => `
+              <div class="tl-node ${i === TIMELINE_NODES.length - 1 ? 'tl-node-active' : ''}">
+                <div class="tl-dot"></div>
+                <span class="tl-label">${n.label}<br>${n.sub}</span>
+              </div>`).join('');
+            el.innerHTML = `
+              <div class="tl-story">
+                <p>從第一次到今天，六次站上台。<br>每次大象都來了，但每次牠待的時間都更短。</p>
+              </div>
+              <div class="tl-wrapper">
+                <div class="tl-line"></div>
+                <div class="tl-nodes">${nodesHtml}</div>
+              </div>`;
+            break;
         }
 
-        // 生成 QR Code（收尾投稿）
-        const qrContainer2 = document.getElementById('qrcode-container-2');
-        if (qrContainer2) {
-          new QRCode(qrContainer2, {
-            text: SUBMIT_URL_Q2,
-            width: 220,
-            height: 220,
-            colorDark: '#2C1810',
-            colorLight: '#FFF8F0',
-            correctLevel: QRCode.CorrectLevel.M
-          });
-        }
-
-        // BUG-6：動態設定 URL 顯示文字
-        const qrUrl1 = document.getElementById('qr-url-1');
-        if (qrUrl1) qrUrl1.textContent = SUBMIT_URL;
-        const qrUrl2 = document.getElementById('qr-url-2');
-        if (qrUrl2) qrUrl2.textContent = SUBMIT_URL_Q2;
+        stage.appendChild(el);
       });
 
-      // 投稿牆：兩個牆分別管理（問題1：大象、問題2：一度轉向）
+      // ============================================================
+      // Sidebar 建構
+      // ============================================================
+      const sidebarList = document.getElementById('sidebar-list');
+      let lastSection = '';
+
+      PAGES.forEach((page, index) => {
+        // 分站標記
+        if (page.section && page.section !== lastSection) {
+          lastSection = page.section;
+          const sectionEl = document.createElement('div');
+          sectionEl.className = 'sidebar-section';
+          sectionEl.textContent = page.section;
+          sidebarList.appendChild(sectionEl);
+        }
+
+        const item = document.createElement('div');
+        item.className = 'sidebar-item';
+        item.dataset.index = index;
+        item.innerHTML = `<span class="sidebar-num">${index + 1}</span> ${page.title}`;
+        item.addEventListener('click', () => goToPage(index));
+        sidebarList.appendChild(item);
+      });
+
+      // ============================================================
+      // 頁面切換核心
+      // ============================================================
+      const allPages = stage.querySelectorAll('.page');
+      const sidebarItems = sidebarList.querySelectorAll('.sidebar-item');
+      const progressFill = document.getElementById('progress-fill');
+
+      function goToPage(index) {
+        if (index < 0 || index >= PAGES.length) return;
+        if (index === currentIndex) return;
+
+        // 移除舊頁面 active
+        allPages[currentIndex].classList.remove('active');
+        sidebarItems.forEach(i => i.classList.remove('active'));
+
+        currentIndex = index;
+
+        // 啟用新頁面
+        allPages[currentIndex].classList.add('active');
+
+        // Sidebar 高亮
+        const activeItem = sidebarList.querySelector(`.sidebar-item[data-index="${currentIndex}"]`);
+        if (activeItem) {
+          activeItem.classList.add('active');
+          // 捲動到可見範圍
+          activeItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+
+        // 進度條
+        const progress = (currentIndex / (PAGES.length - 1)) * 100;
+        progressFill.style.width = progress + '%';
+
+        // 投稿牆管理
+        handleWallActivation();
+      }
+
+      // 初始化第一頁
+      allPages[0].classList.add('active');
+      const firstSidebarItem = sidebarList.querySelector('.sidebar-item[data-index="0"]');
+      if (firstSidebarItem) firstSidebarItem.classList.add('active');
+
+      // ============================================================
+      // 鍵盤狀態機
+      // ============================================================
+      /** 狀態：'navigation' | 'timer-active' */
+      let keyboardState = 'navigation';
+      let sidebarVisible = false;
+      const sidebar = document.getElementById('sidebar');
+
+      function toggleSidebar() {
+        sidebarVisible = !sidebarVisible;
+        sidebar.classList.toggle('open', sidebarVisible);
+      }
+
+      document.addEventListener('keydown', (e) => {
+        // S 鍵：sidebar toggle（任何狀態都可用）
+        if (e.code === 'KeyS' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+          e.preventDefault();
+          toggleSidebar();
+          return;
+        }
+
+        if (keyboardState === 'navigation') {
+          // 方向鍵 / PageUp/PageDown 切頁
+          if (['ArrowRight', 'ArrowDown', 'PageDown'].includes(e.code)) {
+            e.preventDefault();
+            goToPage(currentIndex + 1);
+          } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.code)) {
+            e.preventDefault();
+            goToPage(currentIndex - 1);
+          }
+          // 空白鍵在計時器頁啟動計時器
+          else if (e.code === 'Space') {
+            e.preventDefault();
+            const pageData = PAGES[currentIndex];
+            if (pageData.type === 'timer') {
+              presentationTimer.startFromPage(allPages[currentIndex], pageData.timer);
+            }
+          }
+        } else if (keyboardState === 'timer-active') {
+          // 方向鍵鎖定
+          if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp', 'PageDown', 'PageUp'].includes(e.code)) {
+            e.preventDefault();
+            return;
+          }
+          // 空白鍵：暫停/繼續
+          if (e.code === 'Space') {
+            e.preventDefault();
+            presentationTimer.togglePause();
+          }
+          // Escape：退出計時器回 navigation
+          if (e.code === 'Escape') {
+            e.preventDefault();
+            presentationTimer.abort();
+          }
+        }
+      });
+
+      // 防止瀏覽器預設捲動
+      window.addEventListener('wheel', (e) => { e.preventDefault(); }, { passive: false });
+
+      // 狀態機 API（供 timer.js 呼叫）
+      window.setKeyboardState = function (state) {
+        keyboardState = state;
+      };
+
+      // ============================================================
+      // 計時器初始化
+      // ============================================================
+      presentationTimer.init();
+
+      // ============================================================
+      // QR Code 生成
+      // ============================================================
+      function generateQR(containerId, url) {
+        const container = document.getElementById(containerId);
+        if (!container || container.children.length > 0) return;
+        new QRCode(container, {
+          text: url,
+          width: 220,
+          height: 220,
+          colorDark: '#5C4033',
+          colorLight: '#FFF8F0',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      }
+
+      // 生成兩個 QR Code
+      generateQR('qrcode-1', SUBMIT_URL);
+      generateQR('qrcode-2', SUBMIT_URL_Q2);
+
+      // 設定 URL 顯示文字
+      const qrUrl1 = document.getElementById('qr-url-1');
+      if (qrUrl1) qrUrl1.textContent = SUBMIT_URL;
+      const qrUrl2 = document.getElementById('qr-url-2');
+      if (qrUrl2) qrUrl2.textContent = SUBMIT_URL_Q2;
+
+      // ============================================================
+      // 投稿牆管理
+      // ============================================================
       const wall1 = new SubmissionWall({
         questionId: '1',
-        wallSelector: '#submission-wall',
-        counterSelector: '#submission-counter',
+        wallSelector: '#submission-wall-1',
+        counterSelector: '#submission-counter-1',
         counterLabel: '個大象'
       });
       const wall2 = new SubmissionWall({
@@ -614,24 +472,26 @@
 
       let activeWall = null;
 
-      Reveal.on('slidechanged', (event) => {
-        const currentSlide = event.currentSlide;
-        const wallQuestion = currentSlide.getAttribute('data-wall-question');
-        const hasWall1 = currentSlide.querySelector('#submission-wall') !== null;
+      function handleWallActivation() {
+        const pageData = PAGES[currentIndex];
 
-        if (hasWall1 && activeWall !== wall1) {
-          if (activeWall) activeWall.destroy();
-          wall1.init();
-          activeWall = wall1;
-        } else if (wallQuestion === '2' && activeWall !== wall2) {
-          if (activeWall) activeWall.destroy();
-          wall2.init();
-          activeWall = wall2;
-        } else if (!hasWall1 && wallQuestion !== '2' && activeWall) {
+        if (pageData.type === 'wall' && pageData.questionId === '1') {
+          if (activeWall !== wall1) {
+            if (activeWall) activeWall.destroy();
+            wall1.init();
+            activeWall = wall1;
+          }
+        } else if (pageData.type === 'wall' && pageData.questionId === '2') {
+          if (activeWall !== wall2) {
+            if (activeWall) activeWall.destroy();
+            wall2.init();
+            activeWall = wall2;
+          }
+        } else if (activeWall) {
           activeWall.destroy();
           activeWall = null;
         }
-      });
+      }
 
     })();
   </script>

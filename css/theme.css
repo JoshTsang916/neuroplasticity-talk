@@ -1,311 +1,291 @@
 /**
- * 品牌主題樣式
+ * 品牌主題樣式 — 自建 SPA 版
  * 神經可塑性：在旅途中重塑 — HPX 簡報
  *
- * 色彩系統：
- * - 背景（HTML 頁）：#2C1810 深咖啡
- * - 主色/強調：#C8553D 磚紅
- * - 主文字：#FFF8F0 米白
- * - 副文字：#D4956A 焦糖橘
+ * 色彩系統（淺色主題）：
+ * - 背景：#FFF8F0 米白暖底（所有頁面統一）
+ * - 主文字：#5C4033 深咖啡
+ * - 強調色：#C8553D 磚紅
+ * - 副色：#D4956A 焦糖橘
  * - 淺咖啡：#8B7355
- * - 卡片背景：#FFF8F0 米白
- * - 卡片文字：#5C4033 深咖啡
+ * - 不使用純黑純白
  */
 
 /* ========================================
-   基礎設定
+   CSS 變數
    ======================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap');
-
 :root {
-  --color-bg: #2C1810;
-  --color-bg-deep: #1a0f0a;
+  --color-bg: #FFF8F0;
+  --color-text: #5C4033;
   --color-primary: #C8553D;
-  --color-text: #FFF8F0;
-  --color-text-sub: #D4956A;
+  --color-accent: #D4956A;
   --color-muted: #8B7355;
-  --color-card-bg: #FFF8F0;
-  --color-card-text: #5C4033;
+  --color-card-bg: rgba(255, 248, 240, 0.85);
   --font-heading: 'Noto Serif TC', serif;
   --font-body: 'Microsoft YaHei', sans-serif;
-  --font-english: 'Georgia', serif;
-}
-
-/* Reveal.js 全域覆寫 */
-.reveal {
-  font-family: var(--font-body);
-  font-weight: 600;
-  color: var(--color-text);
-  letter-spacing: 0.03em;
-}
-
-.reveal .slides {
-  text-align: left;
-}
-
-/* 深色背景（HTML 頁面預設）— 漸層 + 微光暈 */
-.reveal .slides section {
-  background:
-    radial-gradient(circle at 30% 50%, rgba(212, 149, 106, 0.08), transparent 60%),
-    linear-gradient(135deg, #2C1810 0%, #1a0f0a 100%);
-}
-
-/* NLM 圖片頁：背景由圖片處理，不需要額外背景色 */
-.reveal .slides section[data-background-image] {
-  background: transparent;
+  --font-english: Georgia, serif;
 }
 
 /* ========================================
-   文字排版
+   基礎 Reset
    ======================================== */
 
-.reveal h1,
-.reveal h2,
-.reveal h3 {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  color: var(--color-text);
-  letter-spacing: 0.06em;
-  line-height: 1.4;
-  text-transform: none;
-  /* 溫暖光暈 */
-  text-shadow:
-    0 2px 8px rgba(200, 85, 61, 0.3),
-    0 4px 12px rgba(212, 149, 106, 0.2);
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.reveal h1 {
-  font-size: 2.4em;
-}
-
-.reveal h2 {
-  font-size: 1.8em;
-}
-
-.reveal h3 {
-  font-size: 1.3em;
-}
-
-.reveal p {
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-bg);
   font-family: var(--font-body);
   font-weight: 600;
   color: var(--color-text);
   letter-spacing: 0.03em;
   line-height: 1.8;
-  margin-bottom: 0.6em;
-}
-
-.reveal .text-sub {
-  color: var(--color-text-sub);
-}
-
-.reveal .text-primary {
-  color: var(--color-primary);
-}
-
-.reveal .text-english {
-  font-family: var(--font-english);
-  font-weight: 400;
-}
-
-/* 裝飾線（段落之間的分隔線） */
-.decorative-line {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(to right, var(--color-primary), transparent);
-  margin: 1.5rem auto;
-  border: none;
+  /* 禁止文字選取（簡報模式） */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 /* ========================================
-   大字金句頁
+   主內容區（Stage）
    ======================================== */
 
-.reveal .slide-quote {
+#stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ========================================
+   頁面基礎
+   ======================================== */
+
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  height: 100%;
-  padding: 2em;
+  background: var(--color-bg);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 300ms ease, visibility 300ms ease;
+  padding: 3em;
 }
 
-.reveal .slide-quote p {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 1.6em;
-  line-height: 1.6;
-  letter-spacing: 0.06em;
-  max-width: 16em;
-  /* 溫暖光暈 */
-  text-shadow:
-    0 2px 8px rgba(200, 85, 61, 0.3),
-    0 4px 12px rgba(212, 149, 106, 0.2);
-}
-
-/* 金句頁裝飾線（上下） */
-.reveal .slide-quote::before,
-.reveal .slide-quote::after {
-  content: '';
-  display: block;
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(to right, transparent, var(--color-primary), transparent);
-  margin: 1.5rem auto;
+.page.active {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* ========================================
-   故事線頁
+   1. NLM 圖片頁
    ======================================== */
 
-.reveal .slide-story {
-  display: flex;
-  flex-direction: column;
+.page-image {
+  padding: 0;
+}
+
+.page-image img {
+  max-width: 100%;
+  max-height: 100vh;
+  object-fit: contain;
+  display: block;
+}
+
+/* ========================================
+   2. 文字頁
+   ======================================== */
+
+.page-text {
+  text-align: left;
+  padding: 3em 6em;
   justify-content: center;
-  padding: 2em 3em;
-  height: 100%;
+  align-items: flex-start;
 }
 
-.reveal .slide-story .story-text {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 1.35em;
-  line-height: 1.8;
-  letter-spacing: 0.04em;
-  max-width: 20em;
-  border-left: 3px solid var(--color-primary);
-  padding-left: 1.2em;
+.page-text .text-content p {
+  font-size: 1.5em;
+  line-height: 2;
+  max-width: 22em;
+  color: var(--color-text);
+}
+
+/* 「手機翻面」頁最後一行（大象提示）用磚紅強調 */
+/* 由 HTML 內嵌處理，不額外指定 */
+
+/* ========================================
+   3. 故事頁
+   ======================================== */
+
+.page-story {
+  padding: 3em 6em;
+  align-items: flex-start;
+}
+
+.story-block {
   position: relative;
-  /* 溫暖光暈 */
-  text-shadow:
-    0 1px 6px rgba(200, 85, 61, 0.2),
-    0 3px 10px rgba(212, 149, 106, 0.15);
+  max-width: 24em;
+  padding-left: 1.5em;
+  border-left: 3px solid var(--color-primary);
 }
 
-/* Josh 故事頁引號裝飾 */
-.reveal .slide-story .story-text::before {
-  content: '\201C';
-  font-size: 6rem;
-  color: rgba(200, 85, 61, 0.15);
+/* 大引號裝飾 */
+.story-quote-mark {
+  font-size: 8rem;
   font-family: Georgia, serif;
+  color: rgba(200, 85, 61, 0.15);
   position: absolute;
-  top: -1rem;
-  left: -0.5rem;
+  top: -2.2rem;
+  left: -0.8rem;
   line-height: 1;
   pointer-events: none;
 }
 
-/* ========================================
-   呼吸過渡頁
-   ======================================== */
-
-.reveal .slide-breath {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  height: 100%;
-  position: relative;
-}
-
-/* 呼吸圓環（文字背後的裝飾） */
-.reveal .slide-breath::before {
-  content: '';
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  border: 2px solid rgba(200, 85, 61, 0.3);
-  border-radius: 50%;
-  animation: breatheCircle 4s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes breatheCircle {
-  0%, 100% { transform: scale(1); opacity: 0.3; }
-  50% { transform: scale(1.15); opacity: 0.6; }
-}
-
-.reveal .slide-breath p {
+.story-text {
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 1.5em;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
+}
+
+.story-decoration {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, var(--color-primary), transparent);
+  margin-top: 2em;
+}
+
+/* ========================================
+   4. 手機 Callback 頁
+   ======================================== */
+
+.page-callback {
+  padding: 3em 6em;
+  align-items: flex-start;
+}
+
+.callback-content p {
+  font-size: 1.4em;
+  line-height: 2;
+  max-width: 22em;
+  color: var(--color-text);
+}
+
+/* ========================================
+   5. 金句頁
+   ======================================== */
+
+.page-quote {
+  text-align: center;
+}
+
+.quote-text {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 2em;
   line-height: 1.8;
   letter-spacing: 0.06em;
-  opacity: 0;
-  animation: breathFadeIn 2s ease forwards, breathingText 4s ease-in-out 2s infinite;
   max-width: 16em;
+  color: var(--color-text);
+}
+
+/* 裝飾線：上下 */
+.quote-decoration-top,
+.quote-decoration-bottom {
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--color-primary), transparent);
+  margin: 1.5rem 0;
+}
+
+/* ========================================
+   6. 呼吸過渡頁
+   ======================================== */
+
+.page-breathing {
+  text-align: center;
+  position: relative;
+}
+
+/* 背景磚紅圓環脈動 */
+.breathing-ring {
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border: 2px solid rgba(200, 85, 61, 0.25);
+  border-radius: 50%;
+  animation: breatheRing 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes breatheRing {
+  0%, 100% { transform: scale(1); opacity: 0.25; }
+  50% { transform: scale(1.2); opacity: 0.5; }
+}
+
+/* 呼吸文字脈動 */
+.breathing-text {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.6em;
+  line-height: 1.8;
+  letter-spacing: 0.06em;
+  max-width: 16em;
+  color: var(--color-text);
   position: relative;
   z-index: 1;
-  /* 溫暖光暈 */
-  text-shadow:
-    0 2px 8px rgba(200, 85, 61, 0.3),
-    0 4px 12px rgba(212, 149, 106, 0.2);
+  opacity: 0;
+  animation: breathFadeIn 2s ease forwards, breathPulse 4s ease-in-out 2s infinite;
 }
 
 @keyframes breathFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* 呼吸脈動（淡入完成後持續呼吸） */
-@keyframes breathingText {
-  0%, 100% { opacity: 0.7; transform: scale(1); }
+@keyframes breathPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.02); }
 }
 
 /* ========================================
-   手機指令頁
+   7. 計時器頁
    ======================================== */
 
-.reveal .slide-instruction {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2em 3em;
-  height: 100%;
+.page-timer {
+  gap: 0;
 }
 
-.reveal .slide-instruction p {
-  font-size: 1.2em;
-  line-height: 2;
-  max-width: 22em;
-  text-shadow:
-    0 1px 6px rgba(200, 85, 61, 0.2),
-    0 3px 10px rgba(212, 149, 106, 0.12);
-}
-
-/* ========================================
-   計時器
-   ======================================== */
-
-.reveal .slide-timer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  /* 微弱的放射狀光暈背景 */
-  background:
-    radial-gradient(circle at 50% 50%, rgba(200, 85, 61, 0.06) 0%, transparent 50%),
-    radial-gradient(circle at 30% 50%, rgba(212, 149, 106, 0.08), transparent 60%),
-    linear-gradient(135deg, #2C1810 0%, #1a0f0a 100%);
+.timer-prompt {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.3em;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
+  text-align: center;
+  max-width: 20em;
+  margin-bottom: 1.5em;
 }
 
 .timer-container {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  position: relative;
 }
 
 .timer-ring-wrapper,
@@ -317,13 +297,13 @@
 }
 
 .timer-ring {
-  width: 60vmin;
-  height: 60vmin;
+  width: 45vmin;
+  height: 45vmin;
 }
 
 .timer-ring-large {
-  width: 50vmin;
-  height: 50vmin;
+  width: 40vmin;
+  height: 40vmin;
 }
 
 .timer-ring-progress {
@@ -333,27 +313,25 @@
 .timer-digital {
   position: absolute;
   font-family: var(--font-english);
-  font-size: 4em;
+  font-size: 3.5em;
   font-weight: 400;
   color: var(--color-text);
   letter-spacing: 0.05em;
-  /* 數字光暈 */
-  text-shadow: 0 0 20px rgba(212, 149, 106, 0.3);
 }
 
 .timer-hint {
   margin-top: 1.5em;
   font-size: 0.9em;
-  color: var(--color-text-sub);
+  color: var(--color-muted);
   opacity: 0.7;
 }
 
 /* 呼吸脈動效果（30 秒計時器） */
-.breathing {
-  animation: breathingPulse 4s ease-in-out infinite;
+.breathing-timer {
+  animation: timerBreathePulse 4s ease-in-out infinite;
 }
 
-@keyframes breathingPulse {
+@keyframes timerBreathePulse {
   0%, 100% { opacity: 0.6; }
   50% { opacity: 1.0; }
 }
@@ -370,53 +348,62 @@
   }
 }
 
+/* 計時器暫停指示（覆蓋在圓環上方） */
+.timer-paused-indicator {
+  position: absolute;
+  font-family: var(--font-body);
+  font-size: 0.9em;
+  color: var(--color-accent);
+  opacity: 0.8;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 2em);
+  pointer-events: none;
+}
+
 /* ========================================
-   QR Code 頁
+   8. QR Code 頁
    ======================================== */
 
-.reveal .slide-qr {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.page-qr {
   text-align: center;
-  height: 100%;
   gap: 1.5em;
 }
 
 .qr-question {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.2em;
-  line-height: 1.6;
+  font-size: 1.3em;
+  line-height: 1.7;
   letter-spacing: 0.04em;
   max-width: 18em;
-  margin-bottom: 0.5em;
+  color: var(--color-text);
 }
 
-/* BUG-1 修正：用屬性選擇器統一所有 QR code 容器的樣式 */
-[id^="qrcode-container"] {
+.qr-wrapper {
   padding: 1.2em;
-  background: var(--color-card-bg);
+  background: var(--color-bg);
+  border: 2px solid rgba(200, 85, 61, 0.15);
   border-radius: 12px;
   display: inline-block;
 }
 
 .qr-url {
   font-family: var(--font-english);
-  font-size: 1.1em;
-  color: var(--color-text-sub);
-  margin-top: 0.5em;
+  font-size: 1.2em;
+  color: var(--color-accent);
+  font-weight: 400;
 }
 
 /* ========================================
-   投稿牆
+   9. 投稿牆頁
    ======================================== */
 
-.reveal .slide-wall {
-  padding: 1.5em;
-  height: 100%;
-  position: relative;
+.page-wall {
+  padding: 2em 3em;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow-y: auto;
 }
 
 .wall-header {
@@ -424,128 +411,140 @@
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 1em;
+  flex-shrink: 0;
 }
 
 .wall-counter {
   font-family: var(--font-english);
-  font-size: 1.1em;
-  color: var(--color-text-sub);
+  font-size: 1em;
+  color: var(--color-muted);
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
 }
 
-/* 計數器數字加大、加光暈 */
 .wall-counter-number {
-  font-size: 2.2em;
+  font-size: 2.5em;
   font-weight: 700;
   color: var(--color-primary);
-  margin: 0 0.2em;
-  text-shadow: 0 0 12px rgba(200, 85, 61, 0.4);
 }
 
-#submission-wall {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8em;
-  align-content: flex-start;
-  max-height: 80vh;
-  overflow: hidden;
-}
-
-/* 卡片毛玻璃效果 */
-.submission-card {
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  background: rgba(255, 248, 240, 0.9);
-  color: var(--color-card-text);
-  border-radius: 12px;
-  padding: 1em 1.2em;
-  font-size: 0.85em;
-  line-height: 1.6;
-  max-width: 280px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
-  flex-shrink: 0;
-  border: 1px solid rgba(255, 248, 240, 0.3);
-}
-
-.submission-card p {
-  color: var(--color-card-text);
-  margin: 0;
+.wall-counter-label {
+  font-family: var(--font-body);
   font-size: 1em;
 }
 
-/* ========================================
-   時間線（站4：六次演講）
-   ======================================== */
-
-.slide-timeline {
+.wall-grid {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  padding: 2em;
+  gap: 0.8em;
+  overflow-y: auto;
+  flex: 1;
 }
 
-.timeline-wrapper {
-  width: 90%;
+/* 投稿卡片 — 頂部推入式 */
+.submission-card {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: var(--color-card-bg);
+  color: var(--color-text);
+  border-radius: 12px;
+  padding: 1em 1.4em;
+  font-size: 1em;
+  line-height: 1.7;
+  box-shadow:
+    0 2px 8px rgba(92, 64, 51, 0.08),
+    0 1px 3px rgba(92, 64, 51, 0.05);
+  border: 1px solid rgba(200, 85, 61, 0.08);
+  flex-shrink: 0;
+}
+
+.submission-card p {
+  color: var(--color-text);
+  margin: 0;
+}
+
+/* ========================================
+   10. 時間線頁
+   ======================================== */
+
+.page-timeline {
+  gap: 2em;
+}
+
+.tl-story {
+  text-align: center;
+  max-width: 28em;
+}
+
+.tl-story p {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.2em;
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+.tl-wrapper {
+  width: 85%;
   max-width: 900px;
   position: relative;
-  margin-top: 2em;
 }
 
-/* 連接線漸層（從暗到亮） */
-.timeline-line {
+/* 連接線漸層（灰 → 磚紅） */
+.tl-line {
   width: 100%;
   height: 3px;
   background: linear-gradient(to right,
-    #5C4033 0%,
-    #7A5E4A 20%,
-    #9A7B60 40%,
-    var(--color-text-sub) 60%,
+    #8B7355 0%,
+    #A08060 20%,
+    #B89070 40%,
+    var(--color-accent) 60%,
     var(--color-primary) 80%,
-    var(--color-text) 100%
+    var(--color-primary) 100%
   );
   border-radius: 2px;
-  position: relative;
 }
 
-.timeline-nodes {
+.tl-nodes {
   display: flex;
   justify-content: space-between;
   position: relative;
-  top: -8px;
+  top: -9px;
 }
 
-.timeline-node {
+.tl-node {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.6em;
 }
 
-.timeline-dot {
+.tl-dot {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 2px solid var(--color-text-sub);
+  background: var(--color-muted);
+  border: 2px solid var(--color-muted);
   transition: transform 0.3s ease;
 }
 
-/* 從灰暗到明亮漸變 */
-.timeline-node:nth-child(1) .timeline-dot { background: #5C4033; border-color: #5C4033; }
-.timeline-node:nth-child(2) .timeline-dot { background: #7A5E4A; border-color: #7A5E4A; }
-.timeline-node:nth-child(3) .timeline-dot { background: #9A7B60; border-color: #9A7B60; }
-.timeline-node:nth-child(4) .timeline-dot { background: #B89878; border-color: #B89878; }
-.timeline-node:nth-child(5) .timeline-dot { background: #D4956A; border-color: #D4956A; }
+/* 從灰到磚紅漸變 */
+.tl-node:nth-child(1) .tl-dot { background: #8B7355; border-color: #8B7355; }
+.tl-node:nth-child(2) .tl-dot { background: #9A7D5A; border-color: #9A7D5A; }
+.tl-node:nth-child(3) .tl-dot { background: #A88A65; border-color: #A88A65; }
+.tl-node:nth-child(4) .tl-dot { background: #B89878; border-color: #B89878; }
+.tl-node:nth-child(5) .tl-dot { background: var(--color-accent); border-color: var(--color-accent); }
 
-/* 最後一個節點（今天）加脈動效果 */
-.timeline-node:nth-child(6) .timeline-dot {
+/* 最後一個節點脈動 */
+.tl-node-active .tl-dot {
   background: var(--color-primary);
   border-color: var(--color-primary);
   box-shadow: 0 0 12px rgba(200, 85, 61, 0.5);
-  animation: timelinePulse 2s ease-in-out infinite;
+  animation: tlPulse 2s ease-in-out infinite;
 }
 
-@keyframes timelinePulse {
+@keyframes tlPulse {
   0%, 100% {
     box-shadow: 0 0 12px rgba(200, 85, 61, 0.5);
     transform: scale(1);
@@ -556,137 +555,107 @@
   }
 }
 
-.timeline-label {
-  font-size: 0.6em;
-  color: var(--color-text-sub);
+.tl-label {
+  font-size: 0.7em;
+  color: var(--color-muted);
   text-align: center;
   white-space: nowrap;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-.timeline-node:last-child .timeline-label {
-  color: var(--color-text);
-  font-weight: 700;
-  text-shadow: 0 1px 8px rgba(200, 85, 61, 0.3);
-}
-
-/* ========================================
-   手機 Callback 頁
-   ======================================== */
-
-.reveal .slide-callback {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 2em 3em;
-  height: 100%;
-}
-
-.reveal .slide-callback p {
-  font-size: 1.15em;
-  line-height: 2;
-  max-width: 22em;
-  text-shadow:
-    0 1px 6px rgba(200, 85, 61, 0.2),
-    0 3px 10px rgba(212, 149, 106, 0.12);
-}
-
-/* ========================================
-   Speaker Notes 隱藏（非 speaker view 時不顯示）
-   ======================================== */
-
-.reveal aside.notes {
-  display: none;
-}
-
-/* ========================================
-   Reveal.js 覆寫：控制元素樣式
-   ======================================== */
-
-.reveal .controls {
-  color: var(--color-text-sub);
-}
-
-.reveal .progress {
+.tl-node-active .tl-label {
   color: var(--color-primary);
-  height: 3px;
+  font-weight: 700;
 }
 
-.reveal .slide-number {
-  color: var(--color-text-sub);
+/* ========================================
+   Sidebar
+   ======================================== */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100vh;
+  background: rgba(92, 64, 51, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 100;
+  transform: translateX(-100%);
+  transition: transform 300ms ease;
+  overflow-y: auto;
+  padding: 1.5em 0;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-section {
+  font-size: 0.65em;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 1em 1.2em 0.4em 1.2em;
+  margin-top: 0.5em;
+}
+
+.sidebar-item {
+  font-size: 0.75em;
+  color: #FFF8F0;
+  padding: 0.5em 1.2em;
+  cursor: pointer;
+  transition: background 200ms ease;
+  border-left: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  opacity: 0.7;
+}
+
+.sidebar-item:hover {
+  background: rgba(255, 248, 240, 0.08);
+  opacity: 1;
+}
+
+.sidebar-item.active {
+  border-left-color: var(--color-primary);
+  background: rgba(255, 248, 240, 0.1);
+  opacity: 1;
+  font-weight: 700;
+}
+
+.sidebar-num {
   font-family: var(--font-english);
-  font-size: 0.7em;
-  opacity: 0.5;
+  font-size: 0.85em;
+  color: var(--color-accent);
+  min-width: 1.6em;
+  opacity: 0.6;
 }
 
 /* ========================================
-   NLM 圖片頁背景設定
+   底部進度條
    ======================================== */
 
-.reveal .slides section[data-background-image] {
-  /* NLM 圖片頁不需要額外的 padding/margin */
-  padding: 0;
+.progress-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(92, 64, 51, 0.1);
+  z-index: 50;
 }
 
-/* ========================================
-   黑屏開場頁
-   ======================================== */
-
-.slide-blackout {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.progress-bar-fill {
   height: 100%;
-  background: radial-gradient(circle at 50% 50%, rgba(44, 24, 16, 0.5), #1a0f0a 70%);
-}
-
-/* 「請閉上眼睛」大字 + 溫暖光暈 */
-.slide-blackout .blackout-text {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 1.8em;
-  color: var(--color-text);
-  opacity: 0;
-  animation: blackoutFadeIn 1.5s ease 0.5s forwards;
-  margin-bottom: 2em;
-  text-shadow:
-    0 2px 12px rgba(200, 85, 61, 0.4),
-    0 4px 20px rgba(212, 149, 106, 0.25);
-}
-
-@keyframes blackoutFadeIn {
-  to { opacity: 0.8; }
-}
-
-/* ========================================
-   分享提問頁
-   ======================================== */
-
-.slide-prompt {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  height: 100%;
-  padding: 2em;
-}
-
-.slide-prompt p {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 1.5em;
-  line-height: 1.6;
-  max-width: 14em;
-  text-shadow:
-    0 2px 8px rgba(200, 85, 61, 0.3),
-    0 4px 12px rgba(212, 149, 106, 0.2);
-}
-
-/* QR 問題文字光暈 */
-.qr-question {
-  text-shadow:
-    0 2px 8px rgba(200, 85, 61, 0.25),
-    0 4px 12px rgba(212, 149, 106, 0.15);
+  width: 0%;
+  background: var(--color-primary);
+  transition: width 300ms ease;
 }

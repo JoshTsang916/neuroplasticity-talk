@@ -1,5 +1,5 @@
 /**
- * Supabase 投稿即時訂閱 + Polling Fallback
+ * Supabase 投稿即時訂閱 + Polling Fallback — 自建 SPA 版
  *
  * 功能：
  * - Supabase Realtime 訂閱 presentation_submissions 表
@@ -7,6 +7,7 @@
  * - 卡片動畫節流：每 300ms 最多渲染一張新卡片
  * - 最多同時顯示 20 張，舊的漸淡移除
  * - 右上角即時計數器
+ * - 頂部推入式：新卡片從上方進來，舊卡片下推
  */
 class SubmissionWall {
   /**
@@ -20,9 +21,9 @@ class SubmissionWall {
     /** @type {string} 問題 ID 過濾 */
     this.questionId = options.questionId || '1';
     /** @type {string} 投稿牆容器 selector */
-    this.wallSelector = options.wallSelector || '#submission-wall';
+    this.wallSelector = options.wallSelector || '#submission-wall-1';
     /** @type {string} 計數器 selector */
-    this.counterSelector = options.counterSelector || '#submission-counter';
+    this.counterSelector = options.counterSelector || '#submission-counter-1';
     /** @type {string} 計數器標籤 */
     this.counterLabel = options.counterLabel || '個大象';
     /** @type {Array<Object>} 目前顯示中的投稿 */
@@ -151,8 +152,6 @@ class SubmissionWall {
       if (this.realtimeConnected) return;
 
       try {
-        // BUG-2 修正：polling 帶 gt() 篩選時，count: 'exact' 返回的是篩選後筆數
-        // 而非總數。改用 this.totalCount += 新增數量 來累加計數。
         let query = this.supabase
           .from(SUPABASE_CONFIG.table)
           .select('*')
@@ -215,37 +214,39 @@ class SubmissionWall {
 
   /**
    * 渲染一張投稿卡片
-   * 進場帶隨機微旋轉 + 縮放，讓動畫更有趣
+   * 頂部推入式：新卡片從上方 slideDown + fadeIn 進來，舊卡片自然下推
    * @param {Object} item - 投稿資料
    */
   _renderCard(item) {
     const wall = document.querySelector(this.wallSelector);
     if (!wall) return;
 
-    // 隨機微旋轉角度（-3 ~ 3 度）和起始縮放
-    const randomRotate = (Math.random() - 0.5) * 6;
-    const startScale = 0.85 + Math.random() * 0.1;
-
     // 建立卡片
     const card = document.createElement('div');
     card.className = 'submission-card';
+    // 初始狀態：透明 + 往上位移（從頂部推入）
     card.style.opacity = '0';
-    card.style.transform = `translateY(20px) rotate(${randomRotate}deg) scale(${startScale})`;
+    card.style.transform = 'translateY(-20px)';
+    card.style.maxHeight = '0';
+    card.style.padding = '0 1.4em';
+    card.style.overflow = 'hidden';
 
     // 用 textContent 防 XSS
     const text = document.createElement('p');
     text.textContent = item.content || '';
     card.appendChild(text);
 
-    // 加入牆面（最前面）
+    // 加入牆面最前面（頂部推入）
     wall.insertBefore(card, wall.firstChild);
     this.submissions.unshift(item);
 
-    // 淡入動畫（保留微旋轉，縮放歸一）
+    // 觸發 reflow 後執行淡入動畫
     requestAnimationFrame(() => {
-      card.style.transition = 'opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease, max-height 0.5s ease, padding 0.5s ease';
       card.style.opacity = '1';
-      card.style.transform = `translateY(0) rotate(${randomRotate * 0.3}deg) scale(1)`;
+      card.style.transform = 'translateY(0)';
+      card.style.maxHeight = '200px';
+      card.style.padding = '1em 1.4em';
     });
 
     // 超過上限時移除最舊的
@@ -290,6 +291,3 @@ class SubmissionWall {
     }
   }
 }
-
-// 全域實例
-const submissionWall = new SubmissionWall();
