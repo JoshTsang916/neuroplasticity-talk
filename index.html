@@ -481,18 +481,18 @@
 
         if (pageData.type === 'wall' && pageData.questionId === '1') {
           if (activeWall !== wall1) {
-            if (activeWall) activeWall.destroy();
-            wall1.init();
+            if (activeWall) activeWall.pause();  // 暫停，不銷毀
+            wall1.init();  // 第一次 init，之後自動走 resume
             activeWall = wall1;
           }
         } else if (pageData.type === 'wall' && pageData.questionId === '2') {
           if (activeWall !== wall2) {
-            if (activeWall) activeWall.destroy();
+            if (activeWall) activeWall.pause();
             wall2.init();
             activeWall = wall2;
           }
         } else if (activeWall) {
-          activeWall.destroy();
+          activeWall.pause();  // 離開投稿牆頁：暫停訂閱，保留 DOM
           activeWall = null;
         }
       }

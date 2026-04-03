@@ -1,13 +1,14 @@
 /**
- * Supabase 投稿即時訂閱 + Polling Fallback — 自建 SPA 版
+ * Supabase 投稿即時訂閱 + Polling Fallback — 念頭氣泡版
  *
  * 功能：
  * - Supabase Realtime 訂閱 presentation_submissions 表
  * - 5 秒 polling fallback（Realtime 斷線時自動接手）
- * - 卡片動畫節流：每 300ms 最多渲染一張新卡片
- * - 最多同時顯示 20 張，舊的漸淡移除
+ * - 卡片動畫節流：每 400ms 最多渲染一張新氣泡
+ * - 最多同時顯示 30 張，舊的漸淡移除
  * - 右上角即時計數器
- * - 頂部推入式：新卡片從上方進來，舊卡片下推
+ * - 「念頭氣泡」佈局：flexbox wrap + 隨機大小 + 隨機旋轉
+ * - 保活模式：離開頁面暫停、回來恢復，不重複渲染
  */
 class SubmissionWall {
   /**
@@ -15,49 +16,44 @@ class SubmissionWall {
    * @param {string} options.questionId - 過濾的問題 ID（'1' 或 '2'）
    * @param {string} options.wallSelector - 投稿牆容器的 CSS selector
    * @param {string} options.counterSelector - 計數器的 CSS selector
-   * @param {string} options.counterLabel - 計數器標籤（如 '個大象' 或 '個承諾'）
+   * @param {string} options.counterLabel - 計數器標籤
    */
   constructor(options = {}) {
-    /** @type {string} 問題 ID 過濾 */
     this.questionId = options.questionId || '1';
-    /** @type {string} 投稿牆容器 selector */
     this.wallSelector = options.wallSelector || '#submission-wall-1';
-    /** @type {string} 計數器 selector */
     this.counterSelector = options.counterSelector || '#submission-counter-1';
-    /** @type {string} 計數器標籤 */
     this.counterLabel = options.counterLabel || '個大象';
-    /** @type {Array<Object>} 目前顯示中的投稿 */
+
     this.submissions = [];
-    /** @type {Array<Object>} 等待渲染的佇列 */
     this.renderQueue = [];
-    /** @type {number} 最大同時顯示數量 */
-    this.maxVisible = 20;
-    /** @type {number} 渲染節流間隔（ms） */
-    this.throttleMs = 300;
-    /** @type {number|null} 節流 timer */
+    this.maxVisible = 30;
+    this.throttleMs = 400;
     this.throttleTimer = null;
-    /** @type {number} 總投稿計數 */
     this.totalCount = 0;
-    /** @type {Object|null} Supabase client */
     this.supabase = null;
-    /** @type {Object|null} Realtime channel */
     this.channel = null;
-    /** @type {number|null} Polling interval ID */
     this.pollingInterval = null;
-    /** @type {boolean} Realtime 是否連線中 */
     this.realtimeConnected = false;
-    /** @type {Set<string>} 已顯示過的投稿 ID（防重複） */
     this.seenIds = new Set();
-    /** @type {string|null} 上次 polling 的最新時間戳 */
     this.lastPolledAt = null;
+
+    /** @type {boolean} 是否已初始化過（保活用） */
+    this.initialized = false;
+    /** @type {boolean} 是否處於活躍狀態 */
+    this.active = false;
   }
 
   /**
-   * 初始化投稿牆
-   * 需要在投稿牆頁面進入時呼叫
+   * 初始化投稿牆（只會執行一次）
+   * 第二次呼叫會自動走 resume 路徑
    */
   async init() {
-    // 初始化 Supabase client（使用 CDN 載入的 supabase-js）
+    // 已初始化過 → 恢復訂閱即可，不重複載入
+    if (this.initialized) {
+      this.resume();
+      return;
+    }
+
     if (typeof window.supabase === 'undefined') {
       console.error('Supabase client 未載入');
       return;
@@ -68,19 +64,75 @@ class SubmissionWall {
       SUPABASE_CONFIG.anonKey
     );
 
-    // 載入現有投稿
     await this._loadExisting();
-
-    // 啟動 Realtime 訂閱
     this._subscribeRealtime();
-
-    // 啟動 polling fallback
     this._startPolling();
+
+    this.initialized = true;
+    this.active = true;
   }
 
   /**
-   * 載入現有投稿（初始化時）
+   * 恢復訂閱（從暫停狀態回來）
    */
+  resume() {
+    if (this.active) return;
+
+    // 重新訂閱 Realtime（之前被移除了）
+    if (!this.channel) {
+      this._subscribeRealtime();
+    }
+
+    // 重新啟動 polling
+    if (!this.pollingInterval) {
+      this._startPolling();
+    }
+
+    this.active = true;
+  }
+
+  /**
+   * 暫停訂閱（離開頁面時），保留 DOM 和狀態
+   */
+  pause() {
+    if (!this.active) return;
+
+    // 停止 Realtime
+    if (this.channel) {
+      this.supabase.removeChannel(this.channel);
+      this.channel = null;
+    }
+
+    // 停止 polling
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
+      this.pollingInterval = null;
+    }
+
+    if (this.throttleTimer) {
+      clearTimeout(this.throttleTimer);
+      this.throttleTimer = null;
+    }
+
+    this.active = false;
+    // 注意：不清 DOM、不清 seenIds、不清 submissions
+  }
+
+  /**
+   * 完全銷毀（頁面卸載時才需要）
+   */
+  destroy() {
+    this.pause();
+    this.initialized = false;
+    this.seenIds.clear();
+    this.submissions = [];
+    this.totalCount = 0;
+  }
+
+  // ────────────────────────────
+  // 內部方法
+  // ────────────────────────────
+
   async _loadExisting() {
     try {
       const { data, error, count } = await this.supabase
@@ -97,10 +149,8 @@ class SubmissionWall {
       this._updateCounter();
 
       if (data && data.length > 0) {
-        // 記錄最新時間戳供 polling 用
         this.lastPolledAt = data[0].created_at;
-
-        // 反轉為時間順序（舊→新），逐一加入渲染佇列
+        // 反轉為時間順序（舊→新），逐一渲染
         data.reverse().forEach(item => {
           this.seenIds.add(item.id);
           this._addToRenderQueue(item);
@@ -111,12 +161,9 @@ class SubmissionWall {
     }
   }
 
-  /**
-   * 訂閱 Supabase Realtime
-   */
   _subscribeRealtime() {
     this.channel = this.supabase
-      .channel(`submissions-realtime-q${this.questionId}`)
+      .channel(`submissions-realtime-q${this.questionId}-${Date.now()}`)
       .on(
         'postgres_changes',
         {
@@ -128,7 +175,6 @@ class SubmissionWall {
         (payload) => {
           this.realtimeConnected = true;
           const newItem = payload.new;
-          // 過濾 question_id（Realtime filter 不支援多欄位，需要前端過濾）
           if (newItem.question_id !== this.questionId) return;
           if (!this.seenIds.has(newItem.id)) {
             this.seenIds.add(newItem.id);
@@ -143,12 +189,8 @@ class SubmissionWall {
       });
   }
 
-  /**
-   * 啟動 5 秒 polling fallback
-   */
   _startPolling() {
     this.pollingInterval = setInterval(async () => {
-      // Realtime 正常時跳過 polling
       if (this.realtimeConnected) return;
 
       try {
@@ -169,7 +211,6 @@ class SubmissionWall {
 
         if (data && data.length > 0) {
           this.lastPolledAt = data[0].created_at;
-          // 反轉為時間順序
           data.reverse().forEach(item => {
             if (!this.seenIds.has(item.id)) {
               this.seenIds.add(item.id);
@@ -185,24 +226,17 @@ class SubmissionWall {
     }, 5000);
   }
 
-  /**
-   * 將投稿加入渲染佇列（節流處理）
-   * @param {Object} item - 投稿資料
-   */
   _addToRenderQueue(item) {
     this.renderQueue.push(item);
     this._processQueue();
   }
 
-  /**
-   * 處理渲染佇列（每 300ms 最多渲染一張）
-   */
   _processQueue() {
     if (this.throttleTimer) return;
     if (this.renderQueue.length === 0) return;
 
     const item = this.renderQueue.shift();
-    this._renderCard(item);
+    this._renderBubble(item);
 
     if (this.renderQueue.length > 0) {
       this.throttleTimer = setTimeout(() => {
@@ -213,81 +247,60 @@ class SubmissionWall {
   }
 
   /**
-   * 渲染一張投稿卡片
-   * 頂部推入式：新卡片從上方 slideDown + fadeIn 進來，舊卡片自然下推
-   * @param {Object} item - 投稿資料
+   * 渲染一個念頭氣泡
+   * 隨機大小、微旋轉、淡入放大動畫
    */
-  _renderCard(item) {
+  _renderBubble(item) {
     const wall = document.querySelector(this.wallSelector);
     if (!wall) return;
 
-    // 建立卡片
-    const card = document.createElement('div');
-    card.className = 'submission-card';
-    // 初始狀態：透明 + 往上位移（從頂部推入）
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(-20px)';
-    card.style.maxHeight = '0';
-    card.style.padding = '0 1.4em';
-    card.style.overflow = 'hidden';
+    const bubble = document.createElement('div');
+    bubble.className = 'thought-bubble';
+
+    // 根據文字長度決定氣泡大小等級
+    const textLen = (item.content || '').length;
+    if (textLen <= 10) {
+      bubble.classList.add('bubble-sm');
+    } else if (textLen <= 30) {
+      bubble.classList.add('bubble-md');
+    } else {
+      bubble.classList.add('bubble-lg');
+    }
+
+    // 隨機微旋轉（-4 到 4 度）
+    const rotation = (Math.random() - 0.5) * 8;
+    bubble.style.setProperty('--bubble-rotate', `${rotation}deg`);
+
+    // 隨機動畫延遲（0-200ms，讓同時出現的氣泡有層次）
+    const delay = Math.random() * 0.2;
+    bubble.style.animationDelay = `${delay}s`;
 
     // 用 textContent 防 XSS
-    const text = document.createElement('p');
+    const text = document.createElement('span');
     text.textContent = item.content || '';
-    card.appendChild(text);
+    bubble.appendChild(text);
 
-    // 加入牆面最前面（頂部推入）
-    wall.insertBefore(card, wall.firstChild);
-    this.submissions.unshift(item);
-
-    // 觸發 reflow 後執行淡入動畫
-    requestAnimationFrame(() => {
-      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease, max-height 0.5s ease, padding 0.5s ease';
-      card.style.opacity = '1';
-      card.style.transform = 'translateY(0)';
-      card.style.maxHeight = '200px';
-      card.style.padding = '1em 1.4em';
-    });
+    // 加入牆面
+    wall.appendChild(bubble);
+    this.submissions.push(item);
 
     // 超過上限時移除最舊的
     while (wall.children.length > this.maxVisible) {
-      const oldest = wall.lastChild;
-      oldest.style.transition = 'opacity 0.5s ease';
-      oldest.style.opacity = '0';
+      const oldest = wall.firstChild;
+      oldest.classList.add('bubble-fade-out');
       setTimeout(() => {
         if (oldest.parentNode === wall) {
           wall.removeChild(oldest);
         }
       }, 500);
-      this.submissions.pop();
+      this.submissions.shift();
     }
   }
 
-  /**
-   * 更新右上角計數器
-   */
   _updateCounter() {
     const counter = document.querySelector(this.counterSelector);
     if (counter) {
       counter.textContent = this.totalCount;
-    }
-  }
-
-  /**
-   * 銷毀（離開投稿牆時清理）
-   */
-  destroy() {
-    if (this.channel) {
-      this.supabase.removeChannel(this.channel);
-      this.channel = null;
-    }
-    if (this.pollingInterval) {
-      clearInterval(this.pollingInterval);
-      this.pollingInterval = null;
-    }
-    if (this.throttleTimer) {
-      clearTimeout(this.throttleTimer);
-      this.throttleTimer = null;
     }
   }
 }
