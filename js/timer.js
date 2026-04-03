@@ -94,6 +94,11 @@ class PresentationTimer {
   abort() {
     if (!this.running) return;
     this._cleanup();
+    // 恢復「按空白鍵開始」提示
+    if (this._container) {
+      const hint = this._container.querySelector('.timer-hint');
+      if (hint) hint.style.display = '';
+    }
     window.setKeyboardState('navigation');
   }
 

@@ -312,7 +312,11 @@
         const item = document.createElement('div');
         item.className = 'sidebar-item';
         item.dataset.index = index;
-        item.innerHTML = `<span class="sidebar-num">${index + 1}</span> ${page.title}`;
+        const numSpan = document.createElement('span');
+        numSpan.className = 'sidebar-num';
+        numSpan.textContent = index + 1;
+        item.appendChild(numSpan);
+        item.appendChild(document.createTextNode(' ' + page.title));
         item.addEventListener('click', () => goToPage(index));
         sidebarList.appendChild(item);
       });
@@ -415,8 +419,8 @@
         }
       });
 
-      // 防止瀏覽器預設捲動
-      window.addEventListener('wheel', (e) => { e.preventDefault(); }, { passive: false });
+      // 防止瀏覽器預設捲動（僅主舞台區，側欄保留捲動）
+      stage.addEventListener('wheel', (e) => { e.preventDefault(); }, { passive: false });
 
       // 狀態機 API（供 timer.js 呼叫）
       window.setKeyboardState = function (state) {
