@@ -61,58 +61,61 @@
       const PAGES = [
         // 開場
         { id: 'opening-eyes', type: 'timer', timer: 15, title: '請閉上眼睛', text: '請閉上眼睛。', section: '開場' },
+        { id: 'cover', type: 'image', src: 'slides/01-cover.webp', title: '封面', section: '' },
+        { id: 'book-intro', type: 'image', src: 'slides/02-book-intro.webp', title: '這本書', section: '' },
+        { id: 'elephant-room', type: 'image', src: 'slides/v3-01-elephant-room.png', title: '房間裡的大象', section: '' },
         { id: 'opening-phone', type: 'text', title: '手機翻面', text: '把手機拿出來，看一下通知，然後翻面放在桌上。\n接下來 50 分鐘，試著不碰它。\n每次你想翻過來——那就是你的大象。', section: '' },
 
-        // 站1：啟程
-        { id: 'cover', type: 'image', src: 'slides/01-cover.webp', title: '封面', section: '站1：啟程' },
-        { id: 'book-intro', type: 'image', src: 'slides/02-book-intro.webp', title: '改變的溫柔指南', section: '' },
-        { id: 'elephant-rider', type: 'image', src: 'slides/03-elephant-rider.webp', title: '大象與騎象人', section: '' },
-        { id: 'stress-hijack', type: 'image', src: 'slides/04-stress-hijack.webp', title: '壓力劫持', section: '' },
-        { id: 'story-1', type: 'story', title: 'Josh 故事①', text: '第一次 HPX 講完，反芻三天。\n大腦一直說：你講得很爛，大家覺得你在浪費時間。', section: '' },
-
-        // 站2：迷航與覺察
-        { id: 'anxiety-chain', type: 'image', src: 'slides/05-anxiety-chain.webp', title: '焦慮的形成鏈', section: '站2：迷航' },
-        { id: 'habit-loop', type: 'image', src: 'slides/06-habit-loop.webp', title: '習慣死迴圈', section: '' },
+        // 大象與騎象人
+        { id: 'elephant-vs-rider', type: 'image', src: 'slides/v3-02-elephant-vs-rider.png', title: '大象 vs 騎象人', section: '大象與騎象人' },
+        { id: 'negative-spiral', type: 'image', src: 'slides/v3-03-negative-spiral.png', title: '低電量負面螺旋', section: '' },
         { id: 'phone-cb-1', type: 'callback', title: '手機 Callback①', text: '順便問一下，\n剛才有人已經想翻手機了嗎？\n那就是 Cue → Routine → Reward 正在運作。', section: '' },
-        { id: 'software-update', type: 'image', src: 'slides/07-software-update.webp', title: '大腦軟體更新', section: '' },
-        { id: 'separate-self', type: 'image', src: 'slides/08-separate-self.webp', title: '抽離視角', section: '' },
-        { id: 'story-2', type: 'story', title: 'Josh 故事②', text: '到了第三四次，\n我注意到大象每次說同樣的台詞。\n光是注意到這件事，\n反芻從三天變成了一天。', section: '' },
+
+        // 翻轉：神經可塑性
+        { id: 'fire-wire', type: 'image', src: 'slides/v3-04-fire-wire.png', title: 'Fire together, wire together', section: '神經可塑性' },
+        { id: 'my-elephant', type: 'image', src: 'slides/v3-05-my-elephant.png', title: '我的大象', section: '' },
 
         // 呼吸過渡
         { id: 'breath-1', type: 'breathing', title: '呼吸', text: '你的大腦正在保護你。\n只是有時候，保護看起來像是困住。', section: '呼吸' },
 
-        // 互動1
-        { id: 'qr-1', type: 'qr', title: 'QR 投稿', question: '最近有什麼事，你知道不該在意，但大腦就是停不下來？', questionId: '1', section: '互動1' },
+        // 互動1：命名你的大象
+        { id: 'qr-1', type: 'qr', title: 'QR 投稿', question: '寫下你的大象——最近有什麼念頭，你知道不該在意，但大腦就是停不下來？', questionId: '1', section: '互動' },
         { id: 'wall-1', type: 'wall', title: '投稿牆', questionId: '1', counterLabel: '個大象', section: '' },
-        { id: 'naming', type: 'timer', timer: 30, title: '命名練習', text: '在心裡說：\n我注意到我在擔心___。\n不用解決，就是命名。', section: '' },
 
-        // 站3：掌舵與重塑
-        { id: 'create-space', type: 'image', src: 'slides/09-create-space.webp', title: '創造空間', section: '站3：掌舵' },
-        { id: 'brain-currency', type: 'image', src: 'slides/10-brain-currency.webp', title: '保護腦力貨幣', section: '' },
-        { id: 'gentle-steer', type: 'image', src: 'slides/11-gentle-steer.webp', title: '輕輕轉向', section: '' },
-        { id: 'phone-cb-2', type: 'callback', title: '手機 Callback②', text: '你從開場到現在忍住沒碰手機——\n恭喜，你已經在練習\n「在刺激和反應之間創造空間」了。', section: '' },
-        { id: 'mental-rehearsal', type: 'image', src: 'slides/12-mental-rehearsal.webp', title: '心理彩排', section: '' },
-        { id: 'name-emotions', type: 'image', src: 'slides/13-name-emotions.webp', title: '呼喚騎象人', section: '' },
-        { id: 'story-3', type: 'story', title: 'Josh 故事③', text: '我沒叫自己不要想，\n只是命名它：噢，又來了。\n然後打開 Claude 問個問題，\n大腦就被轉移了。', section: '' },
+        // 允許跑完 + 自我慈悲
+        { id: 'self-compassion', type: 'image', src: 'slides/v3-06-self-compassion.png', title: '自我慈悲是能量管理', section: '允許與慈悲' },
 
-        // 呼吸過渡
-        { id: 'breath-2', type: 'breathing', title: '呼吸', text: '你不需要一次轉完。\n只需要轉一度。', section: '呼吸' },
+        // 拉開空隙
+        { id: 'three-seconds', type: 'image', src: 'slides/v3-07-three-seconds.png', title: '三秒鐘的縫隙', section: '拉開空隙' },
+        { id: 'failure-is-learning', type: 'quote', title: '失敗的意義', text: '失敗是大腦認識世界\n跟自己的方式', section: '' },
+        { id: 'software-update', type: 'image', src: 'slides/v3-09-software-update.png', title: '軟體更新', section: '' },
 
-        // 互動2
+        // 六次時間線
+        { id: 'timeline', type: 'image', src: 'slides/v3-08-timeline.png', title: '六次演講時間線', section: '時間線' },
+        { id: 'talk-7', type: 'quote', title: '第七次', text: '第七次。2026 年 4 月。現在。\n以前都講 10 分鐘，這次講 50 分鐘。\n\n有沒有緊張？有。\n有沒有反芻？有可能。\n有沒有關係？沒有。', section: '' },
+
+        // 互動2：兩人分享
         { id: 'sharing', type: 'timer', timer: 120, title: '兩人分享', text: '這 30 幾分鐘裡，\n你的大象叫了幾次？\n你怎麼處理的？\n跟旁邊的人聊聊。', section: '互動2' },
         { id: 'volunteer', type: 'text', title: '自願分享', text: '有沒有人願意\n跟大家分享？', section: '' },
 
-        // 站4：無盡的延續
-        { id: 'change-cycle', type: 'image', src: 'slides/14-change-cycle.webp', title: '改變的完整迴圈', section: '站4：延續' },
-        { id: 'timeline', type: 'timeline', title: '六次演講', section: '' },
-        { id: 'treasure', type: 'quote', title: '秘寶', text: '重塑是為了挖出自己\n這個獨一無二的秘寶，\n是為了跟這個世界\n講述一個關於自己的故事。', section: '' },
+        // 培植花卉
+        { id: 'mental-rehearsal', type: 'image', src: 'slides/v3-10-mental-rehearsal.png', title: '心理彩排', section: '培植花卉' },
+        { id: 'huberman-charge', type: 'image', src: 'slides/v3-11-huberman-charge.png', title: '幫大腦充電', section: '' },
+
+        // 呼吸過渡
+        { id: 'breath-2', type: 'breathing', title: '呼吸', text: '你不需要一次轉完。\n只需要轉一度。', section: '呼吸' },
+        { id: 'phone-cb-2', type: 'callback', title: '手機 Callback②', text: '你從開場到現在忍住沒碰手機——\n恭喜，你已經在練習\n「在刺激和反應之間創造空間」了。', section: '' },
+
+        // 承諾牆
+        { id: 'one-degree', type: 'image', src: 'slides/v3-12-one-degree.png', title: '轉向那一度', section: '收尾' },
+        { id: 'qr-2', type: 'qr', title: '一度轉向', question: '你想轉的那一度是什麼？一個小到不可能失敗的動作。', questionId: '2', section: '' },
+        { id: 'wall-2', type: 'wall', title: '承諾牆', questionId: '2', counterLabel: '個承諾', section: '' },
 
         // 收尾
-        { id: 'qr-2', type: 'qr', title: '一度轉向', question: '明天，你可以做的一個「一度轉向」是什麼？', questionId: '2', section: '收尾' },
-        { id: 'wall-2', type: 'wall', title: '承諾牆', questionId: '2', counterLabel: '個承諾', section: '' },
         { id: 'closing-eyes', type: 'timer', timer: 15, title: '再次閉眼', text: '閉上眼睛。\n如果念頭跑出來，\n對它說：我看到你了。', section: '' },
-        { id: 'closing-text', type: 'quote', title: '結語', text: '不管你今天撐了 5 分鐘還是 50 分鐘，\n你已經觀察到了那個衝動。\n這件小事，就是神經可塑性。', section: '' },
-        { id: 'ending', type: 'image', src: 'slides/15-ending.webp', title: '現在進行式', section: '' },
+        { id: 'closing', type: 'image', src: 'slides/v3-13-closing.png', title: '無盡的重塑', section: '' },
+        { id: 'closing-text', type: 'quote', title: '結語', text: '讓我們一起，\n用這顆不斷改變的大腦，\n說一個好故事。', section: '' },
+        { id: 'ending', type: 'text', title: '感謝', text: 'Josh / 人生鍛造所\n\n（logo + IG QR code placeholder）', section: '' },
       ];
 
       // 動態投稿 URL
@@ -144,11 +147,10 @@
        */
       const TIMELINE_NODES = [
         { label: 'Talk 1', sub: '反芻三天' },
-        { label: 'Talk 2', sub: '反芻兩天' },
-        { label: 'Talk 3', sub: '反芻一天' },
-        { label: 'Talk 4', sub: '半天' },
-        { label: 'Talk 5', sub: '幾小時' },
-        { label: 'Talk 6', sub: '神清氣爽' },
+        { label: 'Talk 2', sub: '反芻一兩天' },
+        { label: 'Talk 3-5', sub: '搞懂了減法' },
+        { label: 'Talk 6', sub: '從容面對' },
+        { label: 'Talk 7', sub: '50 分鐘' },
       ];
 
       // 為每種頁面建構 DOM
