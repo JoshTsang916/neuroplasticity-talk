@@ -706,3 +706,35 @@ html, body {
   background: var(--color-primary);
   transition: width 300ms ease;
 }
+
+/* ========================================
+   特定頁面置中
+   ======================================== */
+
+#page-opening-phone,
+#page-phone-cb-1,
+#page-volunteer,
+#page-brain-charge,
+#page-phone-cb-2 {
+  align-items: center;
+}
+
+#page-opening-phone .text-content,
+#page-volunteer .text-content,
+#page-brain-charge .text-content {
+  text-align: center;
+}
+
+#page-phone-cb-1 .callback-content,
+#page-phone-cb-2 .callback-content {
+  text-align: center;
+}
+
+/* 結尾頁置中 */
+#page-ending {
+  align-items: center;
+}
+
+#page-ending .text-content {
+  text-align: center;
+}
