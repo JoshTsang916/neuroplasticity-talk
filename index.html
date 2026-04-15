@@ -312,31 +312,25 @@
         stage.appendChild(el);
       });
 
-      // 結尾頁自訂 layout：Logo 主視覺 + 品牌文字 + 主題 callback + IG QR
-      // （跳脫 page-text 的左對齊預設，整頁置中呈現）
+      // 結尾頁自訂 layout：Logo + 品牌 + IG QR（置中段）+ 主題 callback
+      // 2026-04-15 第二次調整：QR 從最下方移到中段，避免投影時被遮擋
       const endingPage = document.getElementById('page-ending');
       if (endingPage) {
         endingPage.style.alignItems = 'center';
         endingPage.style.justifyContent = 'center';
         endingPage.style.padding = '3em';
         endingPage.innerHTML = `
-          <div class="ending-layout" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5em;max-width:720px;text-align:center;">
+          <div class="ending-layout" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2em;max-width:720px;text-align:center;">
 
             <img src="logo_lifeforge.png" alt="人生鍛造所 Logo"
-                 style="width:min(520px,60vw);max-width:100%;height:auto;display:block;">
+                 style="width:min(480px,55vw);max-width:100%;height:auto;display:block;">
 
             <div style="font-family:var(--font-heading);">
-              <div style="font-size:2.4em;font-weight:700;color:var(--color-primary);letter-spacing:0.1em;line-height:1.2;">Josh</div>
-              <div style="font-size:1.3em;font-weight:400;color:var(--color-text);letter-spacing:0.15em;margin-top:0.4em;">人生鍛造所</div>
+              <div style="font-size:2.2em;font-weight:700;color:var(--color-primary);letter-spacing:0.1em;line-height:1.2;">Josh</div>
+              <div style="font-size:1.2em;font-weight:400;color:var(--color-text);letter-spacing:0.15em;margin-top:0.3em;">人生鍛造所</div>
             </div>
 
-            <div style="width:120px;height:1px;background:rgba(92,64,51,0.2);"></div>
-
-            <p style="font-family:var(--font-heading);font-size:1.4em;font-weight:700;color:var(--color-accent);letter-spacing:0.08em;line-height:1.6;margin:0;">
-              繼續在旅途中重塑
-            </p>
-
-            <div style="display:flex;align-items:center;gap:1.2em;margin-top:0.8em;background:#FFF8F0;padding:0.9em 1.3em;border-radius:16px;border:1px solid rgba(92,64,51,0.1);box-shadow:0 2px 10px rgba(92,64,51,0.06);">
+            <div style="display:flex;align-items:center;gap:1.2em;background:#FFF8F0;padding:0.9em 1.3em;border-radius:16px;border:1px solid rgba(92,64,51,0.1);box-shadow:0 2px 10px rgba(92,64,51,0.06);">
               <img src="joshigqrcode.png" alt="IG QR Code"
                    style="width:130px;height:130px;display:block;border-radius:10px;flex-shrink:0;">
               <div style="text-align:left;">
@@ -344,6 +338,12 @@
                 <div style="font-family:var(--font-english);font-size:1.25em;font-weight:600;color:var(--color-primary);margin-top:0.3em;letter-spacing:0.03em;">@josh_lifeforge</div>
               </div>
             </div>
+
+            <div style="width:120px;height:1px;background:rgba(92,64,51,0.2);"></div>
+
+            <p style="font-family:var(--font-heading);font-size:1.3em;font-weight:700;color:var(--color-accent);letter-spacing:0.08em;line-height:1.6;margin:0;">
+              繼續在旅途中重塑
+            </p>
 
           </div>`;
       }
