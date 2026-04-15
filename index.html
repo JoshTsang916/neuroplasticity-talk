@@ -313,17 +313,17 @@
       });
 
       // 結尾頁自訂 layout：Logo + 品牌 + 雙 QR（IG + FB）+ 主題 callback
-      // 2026-04-15 第三次調整：加入 FB QR，IG 與 FB 並排在中段
+      // 2026-04-15 第四次調整：logo 縮到 0.7x (440→310)，整體靠上
       const endingPage = document.getElementById('page-ending');
       if (endingPage) {
         endingPage.style.alignItems = 'center';
-        endingPage.style.justifyContent = 'center';
-        endingPage.style.padding = '2.5em 3em';
+        endingPage.style.justifyContent = 'flex-start';
+        endingPage.style.padding = '4em 3em 2em';
         endingPage.innerHTML = `
-          <div class="ending-layout" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1em;max-width:860px;text-align:center;">
+          <div class="ending-layout" style="display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:1.1em;max-width:860px;text-align:center;">
 
             <img src="logo_lifeforge.png" alt="人生鍛造所 Logo"
-                 style="width:min(440px,50vw);max-width:100%;height:auto;display:block;">
+                 style="width:min(310px,38vw);max-width:100%;height:auto;display:block;">
 
             <div style="font-family:var(--font-heading);">
               <div style="font-size:2em;font-weight:700;color:var(--color-primary);letter-spacing:0.1em;line-height:1.2;">Josh</div>
