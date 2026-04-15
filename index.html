@@ -263,8 +263,13 @@
             el.dataset.questionId = page.questionId;
             const wallId = `submission-wall-${page.questionId}`;
             const counterId = `submission-counter-${page.questionId}`;
+            const wallQrId = `wall-qr-${page.questionId}`;
             el.innerHTML = `
               <div class="wall-header">
+                <div class="wall-qr-mini">
+                  <div class="wall-qr-canvas" id="${wallQrId}"></div>
+                  <span class="wall-qr-label">還沒投稿？<br>掃我</span>
+                </div>
                 <div class="wall-counter">
                   <span class="wall-counter-number" id="${counterId}">0</span>
                   <span class="wall-counter-label">${page.counterLabel}</span>
@@ -445,22 +450,26 @@
       // ============================================================
       // QR Code 生成
       // ============================================================
-      function generateQR(containerId, url) {
+      function generateQR(containerId, url, size = 220) {
         const container = document.getElementById(containerId);
         if (!container || container.children.length > 0) return;
         new QRCode(container, {
           text: url,
-          width: 220,
-          height: 220,
+          width: size,
+          height: size,
           colorDark: '#5C4033',
           colorLight: '#FFF8F0',
           correctLevel: QRCode.CorrectLevel.M
         });
       }
 
-      // 生成兩個 QR Code
+      // 主 QR 投稿頁（大）
       generateQR('qrcode-1', SUBMIT_URL);
       generateQR('qrcode-2', SUBMIT_URL_Q2);
+
+      // 投稿牆 / 承諾牆 header 迷你 QR（給晚到的人隨時可掃）
+      generateQR('wall-qr-1', SUBMIT_URL, 110);
+      generateQR('wall-qr-2', SUBMIT_URL_Q2, 110);
 
       // 設定 URL 顯示文字
       const qrUrl1 = document.getElementById('qr-url-1');
