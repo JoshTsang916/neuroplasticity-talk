@@ -312,36 +312,49 @@
         stage.appendChild(el);
       });
 
-      // 結尾頁自訂 layout：Logo + 品牌 + IG QR（置中段）+ 主題 callback
-      // 2026-04-15 第二次調整：QR 從最下方移到中段，避免投影時被遮擋
+      // 結尾頁自訂 layout：Logo + 品牌 + 雙 QR（IG + FB）+ 主題 callback
+      // 2026-04-15 第三次調整：加入 FB QR，IG 與 FB 並排在中段
       const endingPage = document.getElementById('page-ending');
       if (endingPage) {
         endingPage.style.alignItems = 'center';
         endingPage.style.justifyContent = 'center';
-        endingPage.style.padding = '3em';
+        endingPage.style.padding = '2.5em 3em';
         endingPage.innerHTML = `
-          <div class="ending-layout" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2em;max-width:720px;text-align:center;">
+          <div class="ending-layout" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1em;max-width:860px;text-align:center;">
 
             <img src="logo_lifeforge.png" alt="人生鍛造所 Logo"
-                 style="width:min(480px,55vw);max-width:100%;height:auto;display:block;">
+                 style="width:min(440px,50vw);max-width:100%;height:auto;display:block;">
 
             <div style="font-family:var(--font-heading);">
-              <div style="font-size:2.2em;font-weight:700;color:var(--color-primary);letter-spacing:0.1em;line-height:1.2;">Josh</div>
-              <div style="font-size:1.2em;font-weight:400;color:var(--color-text);letter-spacing:0.15em;margin-top:0.3em;">人生鍛造所</div>
+              <div style="font-size:2em;font-weight:700;color:var(--color-primary);letter-spacing:0.1em;line-height:1.2;">Josh</div>
+              <div style="font-size:1.1em;font-weight:400;color:var(--color-text);letter-spacing:0.15em;margin-top:0.3em;">人生鍛造所</div>
             </div>
 
-            <div style="display:flex;align-items:center;gap:1.2em;background:#FFF8F0;padding:0.9em 1.3em;border-radius:16px;border:1px solid rgba(92,64,51,0.1);box-shadow:0 2px 10px rgba(92,64,51,0.06);">
-              <img src="joshigqrcode.png" alt="IG QR Code"
-                   style="width:130px;height:130px;display:block;border-radius:10px;flex-shrink:0;">
-              <div style="text-align:left;">
-                <div style="font-family:var(--font-body);font-size:0.95em;color:var(--color-muted);letter-spacing:0.02em;">追蹤我的 Instagram</div>
-                <div style="font-family:var(--font-english);font-size:1.25em;font-weight:600;color:var(--color-primary);margin-top:0.3em;letter-spacing:0.03em;">@josh_lifeforge</div>
+            <div style="display:flex;flex-wrap:wrap;align-items:stretch;justify-content:center;gap:1em;">
+
+              <div style="display:flex;align-items:center;gap:1em;background:#FFF8F0;padding:0.8em 1.1em;border-radius:16px;border:1px solid rgba(92,64,51,0.1);box-shadow:0 2px 10px rgba(92,64,51,0.06);">
+                <img src="joshigqrcode.png" alt="IG QR Code"
+                     style="width:120px;height:120px;display:block;border-radius:10px;flex-shrink:0;">
+                <div style="text-align:left;">
+                  <div style="font-family:var(--font-body);font-size:0.88em;color:var(--color-muted);letter-spacing:0.02em;">Instagram</div>
+                  <div style="font-family:var(--font-english);font-size:1.1em;font-weight:600;color:var(--color-primary);margin-top:0.25em;letter-spacing:0.03em;">@josh_lifeforge</div>
+                </div>
               </div>
+
+              <div style="display:flex;align-items:center;gap:1em;background:#FFF8F0;padding:0.8em 1.1em;border-radius:16px;border:1px solid rgba(92,64,51,0.1);box-shadow:0 2px 10px rgba(92,64,51,0.06);">
+                <img src="joshfbqrcode.jpg" alt="FB QR Code"
+                     style="width:120px;height:120px;display:block;border-radius:10px;flex-shrink:0;object-fit:contain;background:#fff;">
+                <div style="text-align:left;">
+                  <div style="font-family:var(--font-body);font-size:0.88em;color:var(--color-muted);letter-spacing:0.02em;">Facebook</div>
+                  <div style="font-family:var(--font-english);font-size:1.05em;font-weight:600;color:var(--color-primary);margin-top:0.25em;letter-spacing:0.02em;">Josh / 人生鍛造所</div>
+                </div>
+              </div>
+
             </div>
 
             <div style="width:120px;height:1px;background:rgba(92,64,51,0.2);"></div>
 
-            <p style="font-family:var(--font-heading);font-size:1.3em;font-weight:700;color:var(--color-accent);letter-spacing:0.08em;line-height:1.6;margin:0;">
+            <p style="font-family:var(--font-heading);font-size:1.25em;font-weight:700;color:var(--color-accent);letter-spacing:0.08em;line-height:1.6;margin:0;">
               繼續在旅途中重塑
             </p>
 
