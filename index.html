@@ -312,10 +312,13 @@
         stage.appendChild(el);
       });
 
-      // 結尾頁加入 IG QR Code
+      // 結尾頁加入人生鍛造所 logo + IG QR Code
       const endingContent = document.querySelector('#page-ending .text-content');
       if (endingContent) {
-        endingContent.innerHTML += '<img src="joshigqrcode.png" alt="IG QR Code" style="max-width:200px;margin-top:1.5em;border-radius:8px;">';
+        endingContent.innerHTML =
+          '<img src="logo_lifeforge.png" alt="人生鍛造所 Logo" style="max-width:260px;display:block;margin:0 auto 1em;">'
+          + endingContent.innerHTML
+          + '<img src="joshigqrcode.png" alt="IG QR Code" style="max-width:200px;margin-top:1.5em;border-radius:8px;">';
       }
 
       // ============================================================
